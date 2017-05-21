@@ -39,3 +39,4 @@ create table transaccion(
 	constraint transaccionPK primary key (numTran),
 	constraint transaccionFK1 foreign key (numCuenta) references cuenta(numCuenta)
 );
+grant all privileges on banco.* to chipi@localhost identified by 'userBanco';

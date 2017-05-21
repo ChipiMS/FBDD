@@ -7,9 +7,9 @@ import java.util.logging.Logger;
 public class MySQL {
     private Connection conn = null;
     private String hostname = "localhost";
-    private String dbname = "Banco";
-    private String dbuser = "topicos";
-    private String dbpass = "TopicosProgra";
+    private String dbname = "banco";
+    private String dbuser = "chipi";
+    private String dbpass = "userBanco";
     
     public void Connect() {
         try {
