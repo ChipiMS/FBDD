@@ -68,7 +68,7 @@ public class SucursalesController implements Initializable {
                     if(txtNombre.getText().trim().length() > 0 && txtCiudad.getText().trim().length() > 0 && txtDireccion.getText().trim().length() > 0){
                         sucursaldao.insert(new Sucursal(txtNombre.getText(),txtCiudad.getText(),txtDireccion.getText()));
                         Alert msg = new Alert(Alert.AlertType.INFORMATION);
-                        msg.setTitle("Guardar");
+                        msg.setTitle("Crear");
                         msg.setHeaderText("Sucursal");
                         msg.setContentText("Información guardada correctamente");
                         Optional<ButtonType> respuesta = msg.showAndWait();
@@ -80,7 +80,7 @@ public class SucursalesController implements Initializable {
                     }
                     else{
                         Alert msg = new Alert(Alert.AlertType.INFORMATION);
-                        msg.setTitle("Guardar");
+                        msg.setTitle("Crear");
                         msg.setHeaderText("Sucursal");
                         msg.setContentText("Hay que poner bien la información");
                         msg.show();
@@ -108,7 +108,7 @@ public class SucursalesController implements Initializable {
                     g.setDireccion(txtDireccion.getText());
                     if(sucursaldao.update(g)){
                         Alert msg = new Alert(Alert.AlertType.INFORMATION);
-                        msg.setTitle("Borrar");
+                        msg.setTitle("Modificar");
                         msg.setHeaderText("Sucursal");
                         msg.setContentText("Sucursal modificado correctamente");
                         Optional<ButtonType> respuesta = msg.showAndWait();
