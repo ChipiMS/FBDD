@@ -24,11 +24,12 @@ public class HomeController implements Initializable {
     EventHandler<ActionEvent> listener = new EventHandler<ActionEvent>(){
         @Override
         public void handle(ActionEvent event) {
-            /*if(event.getSource() == btnEmpleados){
+            // EMPLEADOS
+            if(event.getSource() == btnEmpleados){
                 FXMLLoader loader = new FXMLLoader();
                 Parent rootConsultaPersonas = null;
                 try {
-                    rootConsultaPersonas = loader.load(getClass().getResource(".fxml"));
+                    rootConsultaPersonas = loader.load(getClass().getResource("Empleado.fxml"));
                     Scene scene = new Scene(rootConsultaPersonas);
                     Stage stage = new Stage();
                     stage.setScene(scene);
@@ -36,7 +37,8 @@ public class HomeController implements Initializable {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            }*/
+            }
+            // SUCURSALES
             if(event.getSource() == btnSucursales){
                 FXMLLoader loader = new FXMLLoader();
                 Parent rootConsultaPersonas = null;
