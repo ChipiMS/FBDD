@@ -5,9 +5,9 @@
  */
 package banco.fxml;
 
-import banco.Empleado;
+import banco.Cliente;
 import database.MySQL;
-import database.dao.EmpleadoDAO;
+import database.dao.ClienteDAO;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -29,47 +29,47 @@ import javafx.scene.layout.GridPane;
  *
  * @author aldoea
  */
-public class EmpleadoController implements Initializable {
+public class ClienteController implements Initializable {
 
-        @FXML
+@FXML
         Button btnAgregar,btnModificar,btnBorrar;
         @FXML
         GridPane actions;
         @FXML
-        TextField txtNombre,txtTelefono,txtNumSucursal;
+        TextField txtNombre,txtCiudad,txtCalle;
         @FXML
-        TableView<Empleado> table;
+        TableView<Cliente> table;
         Boolean agregando = false;
 
         @Override
         public void initialize(URL url, ResourceBundle rb) {
             MySQL db = new MySQL();
             db.Connect();
-            EmpleadoDAO empleadodao = new EmpleadoDAO(db.getConnection());
+            ClienteDAO clientedao = new ClienteDAO(db.getConnection());
 
-            TableColumn nombres = new TableColumn("Número");
-            nombres.setCellValueFactory(new PropertyValueFactory("numEmpleado"));
+            TableColumn nombres = new TableColumn("Seguro Social");
+            nombres.setCellValueFactory(new PropertyValueFactory("seguroSocial"));
 
             TableColumn apellidos = new TableColumn("Nombre");
-            apellidos.setCellValueFactory(new PropertyValueFactory("nombreEmpleado"));
+            apellidos.setCellValueFactory(new PropertyValueFactory("nombreCliente"));
 
-            TableColumn telefono = new TableColumn("Telefono");
-            telefono.setCellValueFactory(new PropertyValueFactory("telefono"));
+            TableColumn ciudad = new TableColumn("Ciudad");
+            ciudad.setCellValueFactory(new PropertyValueFactory("ciudad"));
 
             TableColumn domicilio = new TableColumn("Sucursal");
-            domicilio.setCellValueFactory(new PropertyValueFactory("numSucursal"));
+            domicilio.setCellValueFactory(new PropertyValueFactory("calle"));
 
-            table.getColumns().addAll(nombres,apellidos,telefono,domicilio);
-            table.setItems(empleadodao.findAll());
+            table.getColumns().addAll(nombres,apellidos,ciudad,domicilio);
+            table.setItems(clientedao.findAll());
             table.setOnMouseClicked(new EventHandler<MouseEvent>(){
                 @Override
                 public void handle(MouseEvent event) {
-                    Empleado g = table.getSelectionModel().getSelectedItem();
+                    Cliente g = table.getSelectionModel().getSelectedItem();
                     btnModificar.setDisable(false);
                     btnBorrar.setDisable(false);
-                    txtNombre.setText(g.getNombreEmpleado());
-                    txtTelefono.setText(g.getTelefono());
-                    txtNumSucursal.setText(g.getNumSucursal());
+                    txtNombre.setText(g.getNombreCliente());
+                    txtCiudad.setText(g.getCiudad());
+                    txtCalle.setText(g.getCalle());
                     actions.setVisible(true);
                     agregando = false;
                 }
@@ -78,15 +78,15 @@ public class EmpleadoController implements Initializable {
                 @Override
                 public void handle(MouseEvent event) {
                     if(agregando){
-                        if(txtNombre.getText().trim().length() > 0 && txtTelefono.getText().trim().length() > 0 && txtNumSucursal.getText().trim().length() > 0){
-                            empleadodao.insert(new Empleado(txtNombre.getText(),txtTelefono.getText(),txtNumSucursal.getText()));
+                        if(txtNombre.getText().trim().length() > 0 && txtCiudad.getText().trim().length() > 0 && txtCalle.getText().trim().length() > 0){
+                            clientedao.insert(new Cliente(txtNombre.getText(),txtCiudad.getText(),txtCalle.getText()));
                             Alert msg = new Alert(Alert.AlertType.INFORMATION);
                             msg.setTitle("Guardar");
-                            msg.setHeaderText("Empleado");
+                            msg.setHeaderText("Cliente");
                             msg.setContentText("Información guardada correctamente");
                             Optional<ButtonType> respuesta = msg.showAndWait();
                             if(respuesta.get() == ButtonType.OK){
-                                table.setItems(empleadodao.findAll());
+                                table.setItems(clientedao.findAll());
                                 agregando = false;
                                 actions.setVisible(false);
                             }
@@ -94,7 +94,7 @@ public class EmpleadoController implements Initializable {
                         else{
                             Alert msg = new Alert(Alert.AlertType.INFORMATION);
                             msg.setTitle("Guardar");
-                            msg.setHeaderText("Empleado");
+                            msg.setHeaderText("Cliente");
                             msg.setContentText("Hay que poner bien la información");
                             msg.show();
 
@@ -104,8 +104,8 @@ public class EmpleadoController implements Initializable {
                         btnModificar.setDisable(true);
                         btnBorrar.setDisable(true);
                         txtNombre.setText("");
-                        txtTelefono.setText("");
-                        txtNumSucursal.setText("");
+                        txtCiudad.setText("");
+                        txtCalle.setText("");
                         actions.setVisible(true);
                         agregando = true;
                     }
@@ -114,26 +114,26 @@ public class EmpleadoController implements Initializable {
             btnModificar.setOnMouseClicked(new EventHandler<MouseEvent>(){
                 @Override
                 public void handle(MouseEvent event) {
-                    Empleado g = table.getSelectionModel().getSelectedItem();
-                    if(txtNombre.getText().trim().length() > 0 && txtTelefono.getText().trim().length() > 0 && txtNumSucursal.getText().trim().length() > 0){
-                        g.setNombreEmpleado(txtNombre.getText());
-                        g.setTelefono(txtTelefono.getText());
-                        g.setNumSucursal(txtNumSucursal.getText());
-                        if(empleadodao.update(g)){
+                    Cliente g = table.getSelectionModel().getSelectedItem();
+                    if(txtNombre.getText().trim().length() > 0 && txtCiudad.getText().trim().length() > 0 && txtCalle.getText().trim().length() > 0){
+                        g.setNombreCliente(txtNombre.getText());
+                        g.setCiudad(txtCiudad.getText());
+                        g.setCalle(txtCalle.getText());
+                        if(clientedao.update(g)){
                             Alert msg = new Alert(Alert.AlertType.INFORMATION);
                             msg.setTitle("Borrar");
-                            msg.setHeaderText("Empleado");
-                            msg.setContentText("Empleado modificado correctamente");
+                            msg.setHeaderText("Cliente");
+                            msg.setContentText("Cliente modificado correctamente");
                             Optional<ButtonType> respuesta = msg.showAndWait();
                             if(respuesta.get() == ButtonType.OK){
-                                table.setItems(empleadodao.findAll());
+                                table.setItems(clientedao.findAll());
                                 actions.setVisible(false);
                             }
                         }
                         else{
                             Alert msg = new Alert(Alert.AlertType.INFORMATION);
                             msg.setTitle("Modificar");
-                            msg.setHeaderText("Empleado");
+                            msg.setHeaderText("Cliente");
                             msg.setContentText("No se puede modificar");
                             msg.show();
                         }
@@ -141,7 +141,7 @@ public class EmpleadoController implements Initializable {
                     else{
                         Alert msg = new Alert(Alert.AlertType.INFORMATION);
                         msg.setTitle("Modificar");
-                        msg.setHeaderText("Empleado");
+                        msg.setHeaderText("Cliente");
                         msg.setContentText("Hay que poner bien la información");
                         msg.show();
                     }
@@ -150,26 +150,27 @@ public class EmpleadoController implements Initializable {
             btnBorrar.setOnMouseClicked(new EventHandler<MouseEvent>(){
                 @Override
                 public void handle(MouseEvent event) {
-                    Empleado g = table.getSelectionModel().getSelectedItem();
-                    if(empleadodao.delete(g.getNumEmpleado())){
+                    Cliente g = table.getSelectionModel().getSelectedItem();
+                    if(clientedao.delete(g.getSeguroSocial())){
                         Alert msg = new Alert(Alert.AlertType.INFORMATION);
                         msg.setTitle("Borrar");
-                        msg.setHeaderText("Empleado");
-                        msg.setContentText("Empleado borrado correctamente");
+                        msg.setHeaderText("Cliente");
+                        msg.setContentText("Cliente borrado correctamente");
                         Optional<ButtonType> respuesta = msg.showAndWait();
                         if(respuesta.get() == ButtonType.OK){
-                            table.setItems(empleadodao.findAll());
+                            table.setItems(clientedao.findAll());
                             actions.setVisible(false);
                         }
                     }
                     else{
                         Alert msg = new Alert(Alert.AlertType.INFORMATION);
                         msg.setTitle("Borrar");
-                        msg.setHeaderText("Empleado");
+                        msg.setHeaderText("Cliente");
                         msg.setContentText("No se puede borrar");
                         msg.show();
                     }
                 }
             });
-        }   // END Initialize        
-} // END EmpleadoController
+        }   // END Initialize 
+    
+}

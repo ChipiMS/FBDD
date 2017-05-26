@@ -52,11 +52,11 @@ public class HomeController implements Initializable {
                     e.printStackTrace();
                 }
             }
-            /*if(event.getSource() == btnClientes){
+            if(event.getSource() == btnClientes){
                 FXMLLoader loader = new FXMLLoader();
                 Parent rootConsultaPersonas = null;
                 try {
-                    rootConsultaPersonas = loader.load(getClass().getResource(".fxml"));
+                    rootConsultaPersonas = loader.load(getClass().getResource("Cliente.fxml"));
                     Scene scene = new Scene(rootConsultaPersonas);
                     Stage stage = new Stage();
                     stage.setScene(scene);
@@ -64,7 +64,7 @@ public class HomeController implements Initializable {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            }*/
+            }
             /*if(event.getSource() == btnCuentas){
                 FXMLLoader loader = new FXMLLoader();
                 Parent rootConsultaPersonas = null;
