@@ -1,7 +1,9 @@
 package banco;
+
 public class Sucursal {
+
     int numSucursal;
-    String nombreSucursal,ciudad,direccion;
+    String nombreSucursal, ciudad, direccion;
 
     public Sucursal(int numSucursal, String nombreSucursal, String ciudad, String direccion) {
         this.numSucursal = numSucursal;
@@ -47,5 +49,10 @@ public class Sucursal {
     public void setDireccion(String direccion) {
         this.direccion = direccion;
     }
-    
+
+    @Override
+    public String toString() {
+        return numSucursal + "";
+    }
+
 }

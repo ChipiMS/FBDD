@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="banco.fxml.TransaccionController">
+    <TableView fx:id="table"></TableView>
+    <GridPane fx:id="actions" visible="false">
+        <Label text="Cantidad " GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+        <TextField fx:id="txtCantidad" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+        <Label text="Fecha (AAAA-MM-DD) " GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        <TextField fx:id="txtFecha" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+        <Label text="Número Cuenta " GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+        <Button fx:id="btnCuentas" text="Ver Cuentas" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+        <ComboBox fx:id="cmbCuenta" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+    </GridPane>
+    <HBox>
+        <Button fx:id="btnAgregar" text="Agregar"></Button>
+        <Button fx:id="btnModificar" text="Modificar" disable="true" ></Button>
+        <Button fx:id="btnBorrar" text="Borrar" disable="true" ></Button>
+    </HBox>
+</VBox>

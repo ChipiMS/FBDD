@@ -58,4 +58,9 @@ public class Cliente {
         this.calle = calle;
     }
 
+    @Override
+    public String toString() {
+        return seguroSocial + ""; //To change body of generated methods, choose Tools | Templates.
+    }
+
 } // END Cliente
