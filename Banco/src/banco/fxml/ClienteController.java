@@ -56,7 +56,7 @@ public class ClienteController implements Initializable {
             TableColumn ciudad = new TableColumn("Ciudad");
             ciudad.setCellValueFactory(new PropertyValueFactory("ciudad"));
 
-            TableColumn domicilio = new TableColumn("Sucursal");
+            TableColumn domicilio = new TableColumn("Calle");
             domicilio.setCellValueFactory(new PropertyValueFactory("calle"));
 
             table.getColumns().addAll(nombres,apellidos,ciudad,domicilio);
@@ -65,6 +65,8 @@ public class ClienteController implements Initializable {
                 @Override
                 public void handle(MouseEvent event) {
                     Cliente g = table.getSelectionModel().getSelectedItem();
+                    if(g == null)
+                        return;
                     btnModificar.setDisable(false);
                     btnBorrar.setDisable(false);
                     txtNombre.setText(g.getNombreCliente());

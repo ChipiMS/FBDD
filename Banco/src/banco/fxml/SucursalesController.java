@@ -52,6 +52,8 @@ public class SucursalesController implements Initializable {
             @Override
             public void handle(MouseEvent event) {
                 Sucursal g = table.getSelectionModel().getSelectedItem();
+                if(g == null)
+                    return;
                 btnModificar.setDisable(false);
                 btnBorrar.setDisable(false);
                 txtNombre.setText(g.getNombreSucursal());

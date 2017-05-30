@@ -10,6 +10,7 @@ import banco.Transaccion;
 import database.MySQL;
 import database.dao.TransaccionDAO;
 import java.net.URL;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.event.EventHandler;
@@ -53,6 +54,7 @@ public class TransaccionController implements Initializable {
     Boolean agregando = false, show = true;
 
     TransaccionDAO transaccion;
+    List<Cuenta> cuentas;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -73,7 +75,8 @@ public class TransaccionController implements Initializable {
         numSucursal.setCellValueFactory(new PropertyValueFactory("numCuenta"));
         
         transaccion = new TransaccionDAO(db.getConnection());
-        cmbCuenta.getItems().addAll(transaccion.findAllCuenta());
+        cuentas = transaccion.findAllCuenta();
+        cmbCuenta.getItems().addAll(cuentas);
         table.getColumns().addAll(numCuenta, saldo, seguroSocial, numSucursal);
         table.setItems(transacciondao.findAll());
         table.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -84,6 +87,11 @@ public class TransaccionController implements Initializable {
                     Transaccion g = table.getSelectionModel().getSelectedItem();
                     txtCantidad.setText(g.getCantidad()+ "");
                     txtFecha.setText(g.getFecha() + "");
+                    for(int i=0;i<cuentas.size();i++){
+                        if(g.getNumCuenta() == cuentas.get(i).getNumCuenta()){
+                            cmbCuenta.getSelectionModel().clearAndSelect(i);
+                        }
+                    }
                 } catch (Exception e) {
                     show = false;
                 }
@@ -100,7 +108,7 @@ public class TransaccionController implements Initializable {
             public void handle(MouseEvent event) {
                 if (agregando) {
                     //new Transaccion(cantidad, fecha, numCuenta)
-                    if (txtCantidad.getText().trim().length() > 0 && txtFecha.getText().trim().length() > 0) {
+                    if (txtCantidad.getText().trim().length() > 0 && txtFecha.getText().trim().length() > 0 && cmbCuenta.getSelectionModel().getSelectedItem() != null) {
                         transacciondao.insert(new Transaccion(Integer.parseInt(txtCantidad.getText()), txtFecha.getText(), Integer.parseInt(cmbCuenta.getSelectionModel().getSelectedItem().toString())));
                         //transacciondao.insert(new Transaccion(Integer.parseInt(txtCantidad.getText()), txtFecha.getText(), Integer.parseInt(cmbCuenta.getSelectionModel().getSelectedItem().toString())));
                         Alert msg = new Alert(Alert.AlertType.INFORMATION);
@@ -126,6 +134,7 @@ public class TransaccionController implements Initializable {
                     btnBorrar.setDisable(true);
                     txtCantidad.setText("");
                     txtFecha.setText("");
+                    cmbCuenta.getSelectionModel().clearSelection();
                     actions.setVisible(true);
                     agregando = true;
                 }
@@ -135,7 +144,7 @@ public class TransaccionController implements Initializable {
             @Override
             public void handle(MouseEvent event) {
                 Transaccion g = table.getSelectionModel().getSelectedItem();
-                if (txtCantidad.getText().trim().length() > 0 && txtFecha.getText().trim().length() > 0) {
+                if (txtCantidad.getText().trim().length() > 0 && txtFecha.getText().trim().length() > 0 && cmbCuenta.getSelectionModel().getSelectedItem() != null) {
                     g.setCantidad(Integer.parseInt(txtCantidad.getText()));
                     g.setFecha(txtFecha.getText());
                     g.setNumCuenta(Integer.parseInt(cmbCuenta.getSelectionModel().getSelectedItem().toString()));

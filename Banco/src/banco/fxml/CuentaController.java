@@ -11,6 +11,7 @@ import banco.Sucursal;
 import database.MySQL;
 import database.dao.CuentaDAO;
 import java.net.URL;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.event.EventHandler;
@@ -53,6 +54,8 @@ public class CuentaController implements Initializable {
     Boolean agregando = false, show = true;
 
     CuentaDAO cuenta;
+    List<Sucursal> sucursales;
+    List<Cliente> clientes;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -73,8 +76,10 @@ public class CuentaController implements Initializable {
         numSucursal.setCellValueFactory(new PropertyValueFactory("numSucursal"));
         
         cuenta = new CuentaDAO(db.getConnection());
-        cmbCliente.getItems().addAll(cuenta.findAllCliente());
-        cmbSucursal.getItems().addAll(cuenta.findAllSuc());
+        clientes = cuenta.findAllCliente();
+        cmbCliente.getItems().addAll(clientes);
+        sucursales = cuenta.findAllSuc();
+        cmbSucursal.getItems().addAll(sucursales);
         table.getColumns().addAll(numCuenta, saldo, seguroSocial, numSucursal);
         table.setItems(cuentadao.findAll());
         table.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -84,6 +89,16 @@ public class CuentaController implements Initializable {
                 try {
                     Cuenta g = table.getSelectionModel().getSelectedItem();
                     txtSaldo.setText(g.getSaldo() + "");
+                    for(int i=0;i<sucursales.size();i++){
+                        if(sucursales.get(i).getNumSucursal() == g.getNumSucursal()){
+                            cmbSucursal.getSelectionModel().clearAndSelect(i);
+                        }
+                    }
+                    for(int i=0;i<clientes.size();i++){
+                        if(g.getSeguroSocial().equals(clientes.get(i).getSeguroSocial()+"")){
+                            cmbCliente.getSelectionModel().clearAndSelect(i);
+                        }
+                    }
                 } catch (Exception e) {
                     show = false;
                 }
@@ -99,7 +114,7 @@ public class CuentaController implements Initializable {
             @Override
             public void handle(MouseEvent event) {
                 if (agregando) {
-                    if (txtSaldo.getText().trim().length() > 0) {
+                    if (txtSaldo.getText().trim().length() > 0 && cmbCliente.getSelectionModel().getSelectedItem() != null && cmbSucursal.getSelectionModel().getSelectedItem() != null) {
                         cuentadao.insert(new Cuenta(Double.parseDouble(txtSaldo.getText()), cmbCliente.getSelectionModel().getSelectedItem().toString() + "", Integer.parseInt(cmbSucursal.getSelectionModel().getSelectedItem().toString())));
                         Alert msg = new Alert(Alert.AlertType.INFORMATION);
                         msg.setTitle("Guardar");
@@ -123,6 +138,8 @@ public class CuentaController implements Initializable {
                     btnModificar.setDisable(true);
                     btnBorrar.setDisable(true);
                     txtSaldo.setText("");
+                    cmbCliente.getSelectionModel().clearSelection();
+                    cmbSucursal.getSelectionModel().clearSelection();
                     actions.setVisible(true);
                     agregando = true;
                 }
@@ -132,15 +149,15 @@ public class CuentaController implements Initializable {
             @Override
             public void handle(MouseEvent event) {
                 Cuenta g = table.getSelectionModel().getSelectedItem();
-                if (txtSaldo.getText().trim().length() > 0) {
+                if (txtSaldo.getText().trim().length() > 0 && cmbCliente.getSelectionModel().getSelectedItem() != null && cmbSucursal.getSelectionModel().getSelectedItem() != null) {
                     g.setSaldo(Double.parseDouble(txtSaldo.getText()));
                     g.setSeguroSocial(cmbCliente.getSelectionModel().getSelectedItem().toString());
                     g.setNumSucursal(Integer.parseInt(cmbSucursal.getSelectionModel().getSelectedItem().toString()));
                     if (cuentadao.update(g)) {
                         Alert msg = new Alert(Alert.AlertType.INFORMATION);
-                        msg.setTitle("Borrar");
+                        msg.setTitle("Modificar");
                         msg.setHeaderText("Cuenta");
-                        msg.setContentText("Cuenta modificado correctamente");
+                        msg.setContentText("Cuenta modificada correctamente");
                         Optional<ButtonType> respuesta = msg.showAndWait();
                         if (respuesta.get() == ButtonType.OK) {
                             table.setItems(cuentadao.findAll());

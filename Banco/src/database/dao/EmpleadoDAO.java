@@ -85,7 +85,7 @@ public class EmpleadoDAO {
             PreparedStatement st = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             st.setInt(1, nextId);
             st.setString(2, empleado.getNombreEmpleado());
-            st.setLong(3, Long.parseLong(empleado.getTelefono()));
+            st.setString(3, empleado.getTelefono());
             System.out.println("Parseo Correcto " + Long.parseLong(empleado.getTelefono()));
             st.setString(4, empleado.getNumSucursal());
             nextId++;

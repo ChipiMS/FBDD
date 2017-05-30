@@ -10,7 +10,7 @@ create table sucursal(
 create table empleado(
 	numEmpleado integer not null,
 	nombreEmpleado varchar(40),
-	telefono integer,
+	telefono char(10),
 	numSucursal int(40),
 	constraint empleadoPK primary key (numEmpleado),
 	constraint empleadoFK1 foreign key (numSucursal) references sucursal(numSucursal)

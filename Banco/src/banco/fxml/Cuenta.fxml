@@ -16,7 +16,7 @@
         <Button fx:id="btnClientes" text="Ver Clientes" GridPane.columnIndex="2" GridPane.rowIndex="1" />
         <Label text="Número Sucursal " GridPane.columnIndex="0" GridPane.rowIndex="2"/>
         <ComboBox fx:id="cmbSucursal" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
-        <Button fx:id="btnSucursales" text="Ver Sucursales" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+        <Button fx:id="btnSucursales" text="Ver Sucursales" GridPane.columnIndex="2" GridPane.rowIndex="2" visible="false" />
     </GridPane>
     <HBox>
         <Button fx:id="btnAgregar" text="Agregar"></Button>

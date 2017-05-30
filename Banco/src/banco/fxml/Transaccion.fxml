@@ -14,7 +14,7 @@
         <Label text="Fecha (AAAA-MM-DD) " GridPane.columnIndex="0" GridPane.rowIndex="1"/>
         <TextField fx:id="txtFecha" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
         <Label text="Número Cuenta " GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-        <Button fx:id="btnCuentas" text="Ver Cuentas" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+        <Button fx:id="btnCuentas" text="Ver Cuentas" GridPane.columnIndex="2" GridPane.rowIndex="2" visible="false"/>
         <ComboBox fx:id="cmbCuenta" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
     </GridPane>
     <HBox>

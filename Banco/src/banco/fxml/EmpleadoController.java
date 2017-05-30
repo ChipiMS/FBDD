@@ -6,9 +6,12 @@
 package banco.fxml;
 
 import banco.Empleado;
+import banco.Sucursal;
 import database.MySQL;
+import database.dao.CuentaDAO;
 import database.dao.EmpleadoDAO;
 import java.net.URL;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.event.EventHandler;
@@ -17,6 +20,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -36,11 +40,13 @@ public class EmpleadoController implements Initializable {
         @FXML
         GridPane actions;
         @FXML
-        TextField txtNombre,txtTelefono,txtNumSucursal;
+        TextField txtNombre,txtTelefono;
+        @FXML
+        ComboBox<Sucursal> cmbSucursal;
         @FXML
         TableView<Empleado> table;
         Boolean agregando = false;
-
+        List<Sucursal> sucursales;
         @Override
         public void initialize(URL url, ResourceBundle rb) {
             MySQL db = new MySQL();
@@ -58,18 +64,29 @@ public class EmpleadoController implements Initializable {
 
             TableColumn domicilio = new TableColumn("Sucursal");
             domicilio.setCellValueFactory(new PropertyValueFactory("numSucursal"));
-
+            
             table.getColumns().addAll(nombres,apellidos,telefono,domicilio);
             table.setItems(empleadodao.findAll());
+            
+            CuentaDAO cuenta = new CuentaDAO(db.getConnection());
+            sucursales = cuenta.findAllSuc();
+            cmbSucursal.getItems().addAll(sucursales);
+            
             table.setOnMouseClicked(new EventHandler<MouseEvent>(){
                 @Override
                 public void handle(MouseEvent event) {
                     Empleado g = table.getSelectionModel().getSelectedItem();
+                    if(g == null)
+                        return;
                     btnModificar.setDisable(false);
                     btnBorrar.setDisable(false);
                     txtNombre.setText(g.getNombreEmpleado());
                     txtTelefono.setText(g.getTelefono());
-                    txtNumSucursal.setText(g.getNumSucursal());
+                    for(int i=0;i<sucursales.size();i++){
+                        if(g.getNumSucursal().equals(sucursales.get(i).getNumSucursal()+"")){
+                            cmbSucursal.getSelectionModel().clearAndSelect(i);
+                        }
+                    }
                     actions.setVisible(true);
                     agregando = false;
                 }
@@ -78,8 +95,8 @@ public class EmpleadoController implements Initializable {
                 @Override
                 public void handle(MouseEvent event) {
                     if(agregando){
-                        if(txtNombre.getText().trim().length() > 0 && txtTelefono.getText().trim().length() > 0 && txtNumSucursal.getText().trim().length() > 0){
-                            empleadodao.insert(new Empleado(txtNombre.getText(),txtTelefono.getText(),txtNumSucursal.getText()));
+                        if(txtNombre.getText().trim().length() > 0 && txtTelefono.getText().trim().length() > 0 && cmbSucursal.getSelectionModel().getSelectedItem() != null){
+                            empleadodao.insert(new Empleado(txtNombre.getText(),txtTelefono.getText(),cmbSucursal.getSelectionModel().getSelectedItem().getNumSucursal()+""));
                             Alert msg = new Alert(Alert.AlertType.INFORMATION);
                             msg.setTitle("Guardar");
                             msg.setHeaderText("Empleado");
@@ -105,7 +122,7 @@ public class EmpleadoController implements Initializable {
                         btnBorrar.setDisable(true);
                         txtNombre.setText("");
                         txtTelefono.setText("");
-                        txtNumSucursal.setText("");
+                        cmbSucursal.getSelectionModel().clearSelection();
                         actions.setVisible(true);
                         agregando = true;
                     }
@@ -115,10 +132,10 @@ public class EmpleadoController implements Initializable {
                 @Override
                 public void handle(MouseEvent event) {
                     Empleado g = table.getSelectionModel().getSelectedItem();
-                    if(txtNombre.getText().trim().length() > 0 && txtTelefono.getText().trim().length() > 0 && txtNumSucursal.getText().trim().length() > 0){
+                    if(txtNombre.getText().trim().length() > 0 && txtTelefono.getText().trim().length() > 0 && cmbSucursal.getSelectionModel().getSelectedItem() != null){
                         g.setNombreEmpleado(txtNombre.getText());
                         g.setTelefono(txtTelefono.getText());
-                        g.setNumSucursal(txtNumSucursal.getText());
+                        g.setNumSucursal(cmbSucursal.getSelectionModel().getSelectedItem().getNumSucursal()+"");
                         if(empleadodao.update(g)){
                             Alert msg = new Alert(Alert.AlertType.INFORMATION);
                             msg.setTitle("Borrar");
