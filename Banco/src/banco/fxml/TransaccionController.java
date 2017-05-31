@@ -109,6 +109,14 @@ public class TransaccionController implements Initializable {
                 if (agregando) {
                     //new Transaccion(cantidad, fecha, numCuenta)
                     if (txtCantidad.getText().trim().length() > 0 && txtFecha.getText().trim().length() > 0 && cmbCuenta.getSelectionModel().getSelectedItem() != null) {
+                        if(!valida(txtCantidad.getText())){
+                            Alert msg = new Alert(Alert.AlertType.INFORMATION);
+                            msg.setTitle("Guardar");
+                            msg.setHeaderText("Transacción");
+                            msg.setContentText("Cantidad tiene que ser un número");
+                            msg.show();
+                            return;
+                        }
                         transacciondao.insert(new Transaccion(Integer.parseInt(txtCantidad.getText()), txtFecha.getText(), Integer.parseInt(cmbCuenta.getSelectionModel().getSelectedItem().toString())));
                         //transacciondao.insert(new Transaccion(Integer.parseInt(txtCantidad.getText()), txtFecha.getText(), Integer.parseInt(cmbCuenta.getSelectionModel().getSelectedItem().toString())));
                         Alert msg = new Alert(Alert.AlertType.INFORMATION);
@@ -145,6 +153,14 @@ public class TransaccionController implements Initializable {
             public void handle(MouseEvent event) {
                 Transaccion g = table.getSelectionModel().getSelectedItem();
                 if (txtCantidad.getText().trim().length() > 0 && txtFecha.getText().trim().length() > 0 && cmbCuenta.getSelectionModel().getSelectedItem() != null) {
+                    if(!valida(txtCantidad.getText())){
+                        Alert msg = new Alert(Alert.AlertType.INFORMATION);
+                        msg.setTitle("Modificar");
+                        msg.setHeaderText("Transacción");
+                        msg.setContentText("Cantidad tiene que ser un número");
+                        msg.show();
+                        return;
+                    }
                     g.setCantidad(Integer.parseInt(txtCantidad.getText()));
                     g.setFecha(txtFecha.getText());
                     g.setNumCuenta(Integer.parseInt(cmbCuenta.getSelectionModel().getSelectedItem().toString()));
@@ -214,5 +230,13 @@ public class TransaccionController implements Initializable {
             }
             
         });
+    }
+    Boolean valida(String toValidate){
+        for(int i=0;i<toValidate.length();i++){
+            if(!(toValidate.charAt(i)>='0'&&toValidate.charAt(i)<='9')){
+                return false;
+            }
+        }
+        return true;
     }
 }

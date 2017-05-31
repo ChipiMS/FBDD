@@ -115,6 +115,14 @@ public class CuentaController implements Initializable {
             public void handle(MouseEvent event) {
                 if (agregando) {
                     if (txtSaldo.getText().trim().length() > 0 && cmbCliente.getSelectionModel().getSelectedItem() != null && cmbSucursal.getSelectionModel().getSelectedItem() != null) {
+                        if(!valida(txtSaldo.getText())){
+                            Alert msg = new Alert(Alert.AlertType.INFORMATION);
+                            msg.setTitle("Guardar");
+                            msg.setHeaderText("Cuenta");
+                            msg.setContentText("Saldo tiene que ser un número");
+                            msg.show();
+                            return;
+                        }
                         cuentadao.insert(new Cuenta(Double.parseDouble(txtSaldo.getText()), cmbCliente.getSelectionModel().getSelectedItem().toString() + "", Integer.parseInt(cmbSucursal.getSelectionModel().getSelectedItem().toString())));
                         Alert msg = new Alert(Alert.AlertType.INFORMATION);
                         msg.setTitle("Guardar");
@@ -150,6 +158,14 @@ public class CuentaController implements Initializable {
             public void handle(MouseEvent event) {
                 Cuenta g = table.getSelectionModel().getSelectedItem();
                 if (txtSaldo.getText().trim().length() > 0 && cmbCliente.getSelectionModel().getSelectedItem() != null && cmbSucursal.getSelectionModel().getSelectedItem() != null) {
+                    if(!valida(txtSaldo.getText())){
+                        Alert msg = new Alert(Alert.AlertType.INFORMATION);
+                        msg.setTitle("Modificar");
+                        msg.setHeaderText("Cuenta");
+                        msg.setContentText("Saldo tiene que ser un número");
+                        msg.show();
+                        return;
+                    }
                     g.setSaldo(Double.parseDouble(txtSaldo.getText()));
                     g.setSeguroSocial(cmbCliente.getSelectionModel().getSelectedItem().toString());
                     g.setNumSucursal(Integer.parseInt(cmbSucursal.getSelectionModel().getSelectedItem().toString()));
@@ -238,6 +254,29 @@ public class CuentaController implements Initializable {
             }
             
         });
+    }
+    Boolean valida(String porValidar){
+        Boolean valido=true;
+        int puntos=0;
+        if(porValidar.length()==0)
+            valido=false;
+        else{
+            if(porValidar.charAt(0)!='-'&&!(porValidar.charAt(0)>='0'&&porValidar.charAt(0)<='9'))
+                if(porValidar.charAt(0)!='.')
+                    valido=false;
+                else
+                    puntos++;
+            for(int i=1;i<porValidar.length();i++){
+                if(!(porValidar.charAt(i)>='0'&&porValidar.charAt(i)<='9'))
+                    if(porValidar.charAt(i)!='.')
+                        valido=false;
+                    else
+                        puntos++;
+            }
+        }
+        if(puntos>1)
+            valido=false;
+        return valido;
     }
 
 }
