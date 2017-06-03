@@ -36,16 +36,16 @@ import javafx.scene.layout.GridPane;
 public class EmpleadoController implements Initializable {
 
         @FXML
-        Button btnAgregar,btnModificar,btnBorrar;
+        Button btnAgregarEmpleados,btnModificarEmpleados,btnBorrarEmpleados;
         @FXML
-        GridPane actions;
+        GridPane actionsEmpleados;
         @FXML
-        TextField txtNombre,txtTelefono;
+        TextField txtNombreEmpleados,txtTelefonoEmpleados;
         @FXML
-        ComboBox<Sucursal> cmbSucursal;
+        ComboBox<Sucursal> cmbSucursalEmpleados;
         @FXML
-        TableView<Empleado> table;
-        Boolean agregando = false;
+        TableView<Empleado> tableEmpleados;
+        Boolean agregandoEmpleados = false;
         List<Sucursal> sucursales;
         @Override
         public void initialize(URL url, ResourceBundle rb) {
@@ -53,59 +53,59 @@ public class EmpleadoController implements Initializable {
             db.Connect();
             EmpleadoDAO empleadodao = new EmpleadoDAO(db.getConnection());
 
-            TableColumn nombres = new TableColumn("Número");
-            nombres.setCellValueFactory(new PropertyValueFactory("numEmpleado"));
+            TableColumn nombresEmpleados = new TableColumn("Número");
+            nombresEmpleados.setCellValueFactory(new PropertyValueFactory("numEmpleado"));
 
-            TableColumn apellidos = new TableColumn("Nombre");
-            apellidos.setCellValueFactory(new PropertyValueFactory("nombreEmpleado"));
+            TableColumn apellidosEmpleados = new TableColumn("Nombre");
+            apellidosEmpleados.setCellValueFactory(new PropertyValueFactory("nombreEmpleado"));
 
-            TableColumn telefono = new TableColumn("Telefono");
-            telefono.setCellValueFactory(new PropertyValueFactory("telefono"));
+            TableColumn telefonoEmpleados = new TableColumn("Telefono");
+            telefonoEmpleados.setCellValueFactory(new PropertyValueFactory("telefono"));
 
-            TableColumn domicilio = new TableColumn("Sucursal");
-            domicilio.setCellValueFactory(new PropertyValueFactory("numSucursal"));
+            TableColumn domicilioEmpleados = new TableColumn("Sucursal");
+            domicilioEmpleados.setCellValueFactory(new PropertyValueFactory("numSucursal"));
             
-            table.getColumns().addAll(nombres,apellidos,telefono,domicilio);
-            table.setItems(empleadodao.findAll());
+            tableEmpleados.getColumns().addAll(nombresEmpleados,apellidosEmpleados,telefonoEmpleados,domicilioEmpleados);
+            tableEmpleados.setItems(empleadodao.findAll());
             
             CuentaDAO cuenta = new CuentaDAO(db.getConnection());
             sucursales = cuenta.findAllSuc();
-            cmbSucursal.getItems().addAll(sucursales);
+            cmbSucursalEmpleados.getItems().addAll(sucursales);
             
-            table.setOnMouseClicked(new EventHandler<MouseEvent>(){
+            tableEmpleados.setOnMouseClicked(new EventHandler<MouseEvent>(){
                 @Override
                 public void handle(MouseEvent event) {
-                    Empleado g = table.getSelectionModel().getSelectedItem();
+                    Empleado g = tableEmpleados.getSelectionModel().getSelectedItem();
                     if(g == null)
                         return;
-                    btnModificar.setDisable(false);
-                    btnBorrar.setDisable(false);
-                    txtNombre.setText(g.getNombreEmpleado());
-                    txtTelefono.setText(g.getTelefono());
+                    btnModificarEmpleados.setDisable(false);
+                    btnBorrarEmpleados.setDisable(false);
+                    txtNombreEmpleados.setText(g.getNombreEmpleado());
+                    txtTelefonoEmpleados.setText(g.getTelefono());
                     for(int i=0;i<sucursales.size();i++){
                         if(g.getNumSucursal().equals(sucursales.get(i).getNumSucursal()+"")){
-                            cmbSucursal.getSelectionModel().clearAndSelect(i);
+                            cmbSucursalEmpleados.getSelectionModel().clearAndSelect(i);
                         }
                     }
-                    actions.setVisible(true);
-                    agregando = false;
+                    actionsEmpleados.setVisible(true);
+                    agregandoEmpleados = false;
                 }
             });
-            btnAgregar.setOnMouseClicked(new EventHandler<MouseEvent>(){
+            btnAgregarEmpleados.setOnMouseClicked(new EventHandler<MouseEvent>(){
                 @Override
                 public void handle(MouseEvent event) {
-                    if(agregando){
-                        if(txtNombre.getText().trim().length() > 0 && txtTelefono.getText().trim().length() > 0 && cmbSucursal.getSelectionModel().getSelectedItem() != null){
-                            empleadodao.insert(new Empleado(txtNombre.getText(),txtTelefono.getText(),cmbSucursal.getSelectionModel().getSelectedItem().getNumSucursal()+""));
+                    if(agregandoEmpleados){
+                        if(txtNombreEmpleados.getText().trim().length() > 0 && txtTelefonoEmpleados.getText().trim().length() > 0 && cmbSucursalEmpleados.getSelectionModel().getSelectedItem() != null){
+                            empleadodao.insert(new Empleado(txtNombreEmpleados.getText(),txtTelefonoEmpleados.getText(),cmbSucursalEmpleados.getSelectionModel().getSelectedItem().getNumSucursal()+""));
                             Alert msg = new Alert(Alert.AlertType.INFORMATION);
                             msg.setTitle("Guardar");
                             msg.setHeaderText("Empleado");
                             msg.setContentText("Información guardada correctamente");
                             Optional<ButtonType> respuesta = msg.showAndWait();
                             if(respuesta.get() == ButtonType.OK){
-                                table.setItems(empleadodao.findAll());
-                                agregando = false;
-                                actions.setVisible(false);
+                                tableEmpleados.setItems(empleadodao.findAll());
+                                agregandoEmpleados = false;
+                                actionsEmpleados.setVisible(false);
                             }
                         }
                         else{
@@ -118,24 +118,24 @@ public class EmpleadoController implements Initializable {
                         }
                     }
                     else{
-                        btnModificar.setDisable(true);
-                        btnBorrar.setDisable(true);
-                        txtNombre.setText("");
-                        txtTelefono.setText("");
-                        cmbSucursal.getSelectionModel().clearSelection();
-                        actions.setVisible(true);
-                        agregando = true;
+                        btnModificarEmpleados.setDisable(true);
+                        btnBorrarEmpleados.setDisable(true);
+                        txtNombreEmpleados.setText("");
+                        txtTelefonoEmpleados.setText("");
+                        cmbSucursalEmpleados.getSelectionModel().clearSelection();
+                        actionsEmpleados.setVisible(true);
+                        agregandoEmpleados = true;
                     }
                 }
             });
-            btnModificar.setOnMouseClicked(new EventHandler<MouseEvent>(){
+            btnModificarEmpleados.setOnMouseClicked(new EventHandler<MouseEvent>(){
                 @Override
                 public void handle(MouseEvent event) {
-                    Empleado g = table.getSelectionModel().getSelectedItem();
-                    if(txtNombre.getText().trim().length() > 0 && txtTelefono.getText().trim().length() > 0 && cmbSucursal.getSelectionModel().getSelectedItem() != null){
-                        g.setNombreEmpleado(txtNombre.getText());
-                        g.setTelefono(txtTelefono.getText());
-                        g.setNumSucursal(cmbSucursal.getSelectionModel().getSelectedItem().getNumSucursal()+"");
+                    Empleado g = tableEmpleados.getSelectionModel().getSelectedItem();
+                    if(txtNombreEmpleados.getText().trim().length() > 0 && txtTelefonoEmpleados.getText().trim().length() > 0 && cmbSucursalEmpleados.getSelectionModel().getSelectedItem() != null){
+                        g.setNombreEmpleado(txtNombreEmpleados.getText());
+                        g.setTelefono(txtTelefonoEmpleados.getText());
+                        g.setNumSucursal(cmbSucursalEmpleados.getSelectionModel().getSelectedItem().getNumSucursal()+"");
                         if(empleadodao.update(g)){
                             Alert msg = new Alert(Alert.AlertType.INFORMATION);
                             msg.setTitle("Borrar");
@@ -143,8 +143,8 @@ public class EmpleadoController implements Initializable {
                             msg.setContentText("Empleado modificado correctamente");
                             Optional<ButtonType> respuesta = msg.showAndWait();
                             if(respuesta.get() == ButtonType.OK){
-                                table.setItems(empleadodao.findAll());
-                                actions.setVisible(false);
+                                tableEmpleados.setItems(empleadodao.findAll());
+                                actionsEmpleados.setVisible(false);
                             }
                         }
                         else{
@@ -164,10 +164,10 @@ public class EmpleadoController implements Initializable {
                     }
                 }
             });
-            btnBorrar.setOnMouseClicked(new EventHandler<MouseEvent>(){
+            btnBorrarEmpleados.setOnMouseClicked(new EventHandler<MouseEvent>(){
                 @Override
                 public void handle(MouseEvent event) {
-                    Empleado g = table.getSelectionModel().getSelectedItem();
+                    Empleado g = tableEmpleados.getSelectionModel().getSelectedItem();
                     if(empleadodao.delete(g.getNumEmpleado())){
                         Alert msg = new Alert(Alert.AlertType.INFORMATION);
                         msg.setTitle("Borrar");
@@ -175,8 +175,8 @@ public class EmpleadoController implements Initializable {
                         msg.setContentText("Empleado borrado correctamente");
                         Optional<ButtonType> respuesta = msg.showAndWait();
                         if(respuesta.get() == ButtonType.OK){
-                            table.setItems(empleadodao.findAll());
-                            actions.setVisible(false);
+                            tableEmpleados.setItems(empleadodao.findAll());
+                            actionsEmpleados.setVisible(false);
                         }
                     }
                     else{

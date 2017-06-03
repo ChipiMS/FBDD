@@ -31,148 +31,167 @@ import javafx.scene.layout.GridPane;
  */
 public class ClienteController implements Initializable {
 
-@FXML
-        Button btnAgregar,btnModificar,btnBorrar;
-        @FXML
-        GridPane actions;
-        @FXML
-        TextField txtNombre,txtCiudad,txtCalle;
-        @FXML
-        TableView<Cliente> table;
-        Boolean agregando = false;
+    @FXML
+    Button btnAgregarCliente,btnModificarCliente,btnBorrarCliente;
+    @FXML
+    GridPane actionsCliente;
+    @FXML
+    TextField txtSeguroSocialCliente,txtNombreCliente,txtCiudadCliente,txtCalleCliente;
+    @FXML
+    TableView<Cliente> tableCliente;
+    Boolean agregandoCliente = false;
 
-        @Override
-        public void initialize(URL url, ResourceBundle rb) {
-            MySQL db = new MySQL();
-            db.Connect();
-            ClienteDAO clientedao = new ClienteDAO(db.getConnection());
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        MySQL db = new MySQL();
+        db.Connect();
+        ClienteDAO clientedao = new ClienteDAO(db.getConnection());
 
-            TableColumn nombres = new TableColumn("Seguro Social");
-            nombres.setCellValueFactory(new PropertyValueFactory("seguroSocial"));
+        TableColumn nombresClientes = new TableColumn("Seguro Social");
+        nombresClientes.setCellValueFactory(new PropertyValueFactory("seguroSocial"));
 
-            TableColumn apellidos = new TableColumn("Nombre");
-            apellidos.setCellValueFactory(new PropertyValueFactory("nombreCliente"));
+        TableColumn apellidosClientes = new TableColumn("Nombre");
+        apellidosClientes.setCellValueFactory(new PropertyValueFactory("nombreCliente"));
 
-            TableColumn ciudad = new TableColumn("Ciudad");
-            ciudad.setCellValueFactory(new PropertyValueFactory("ciudad"));
+        TableColumn ciudadClientes = new TableColumn("Ciudad");
+        ciudadClientes.setCellValueFactory(new PropertyValueFactory("ciudad"));
 
-            TableColumn domicilio = new TableColumn("Calle");
-            domicilio.setCellValueFactory(new PropertyValueFactory("calle"));
+        TableColumn domicilioClientes = new TableColumn("Calle");
+        domicilioClientes.setCellValueFactory(new PropertyValueFactory("calle"));
 
-            table.getColumns().addAll(nombres,apellidos,ciudad,domicilio);
-            table.setItems(clientedao.findAll());
-            table.setOnMouseClicked(new EventHandler<MouseEvent>(){
-                @Override
-                public void handle(MouseEvent event) {
-                    Cliente g = table.getSelectionModel().getSelectedItem();
-                    if(g == null)
-                        return;
-                    btnModificar.setDisable(false);
-                    btnBorrar.setDisable(false);
-                    txtNombre.setText(g.getNombreCliente());
-                    txtCiudad.setText(g.getCiudad());
-                    txtCalle.setText(g.getCalle());
-                    actions.setVisible(true);
-                    agregando = false;
-                }
-            });
-            btnAgregar.setOnMouseClicked(new EventHandler<MouseEvent>(){
-                @Override
-                public void handle(MouseEvent event) {
-                    if(agregando){
-                        if(txtNombre.getText().trim().length() > 0 && txtCiudad.getText().trim().length() > 0 && txtCalle.getText().trim().length() > 0){
-                            clientedao.insert(new Cliente(txtNombre.getText(),txtCiudad.getText(),txtCalle.getText()));
-                            Alert msg = new Alert(Alert.AlertType.INFORMATION);
-                            msg.setTitle("Guardar");
-                            msg.setHeaderText("Cliente");
-                            msg.setContentText("Información guardada correctamente");
-                            Optional<ButtonType> respuesta = msg.showAndWait();
-                            if(respuesta.get() == ButtonType.OK){
-                                table.setItems(clientedao.findAll());
-                                agregando = false;
-                                actions.setVisible(false);
-                            }
-                        }
-                        else{
-                            Alert msg = new Alert(Alert.AlertType.INFORMATION);
-                            msg.setTitle("Guardar");
-                            msg.setHeaderText("Cliente");
-                            msg.setContentText("Hay que poner bien la información");
-                            msg.show();
-
-                        }
-                    }
-                    else{
-                        btnModificar.setDisable(true);
-                        btnBorrar.setDisable(true);
-                        txtNombre.setText("");
-                        txtCiudad.setText("");
-                        txtCalle.setText("");
-                        actions.setVisible(true);
-                        agregando = true;
-                    }
-                }
-            });
-            btnModificar.setOnMouseClicked(new EventHandler<MouseEvent>(){
-                @Override
-                public void handle(MouseEvent event) {
-                    Cliente g = table.getSelectionModel().getSelectedItem();
-                    if(txtNombre.getText().trim().length() > 0 && txtCiudad.getText().trim().length() > 0 && txtCalle.getText().trim().length() > 0){
-                        g.setNombreCliente(txtNombre.getText());
-                        g.setCiudad(txtCiudad.getText());
-                        g.setCalle(txtCalle.getText());
-                        if(clientedao.update(g)){
-                            Alert msg = new Alert(Alert.AlertType.INFORMATION);
-                            msg.setTitle("Borrar");
-                            msg.setHeaderText("Cliente");
-                            msg.setContentText("Cliente modificado correctamente");
-                            Optional<ButtonType> respuesta = msg.showAndWait();
-                            if(respuesta.get() == ButtonType.OK){
-                                table.setItems(clientedao.findAll());
-                                actions.setVisible(false);
-                            }
-                        }
-                        else{
+        tableCliente.getColumns().addAll(nombresClientes,apellidosClientes,ciudadClientes,domicilioClientes);
+        tableCliente.setItems(clientedao.findAll());
+        tableCliente.setOnMouseClicked(new EventHandler<MouseEvent>(){
+            @Override
+            public void handle(MouseEvent event) {
+                Cliente g = tableCliente.getSelectionModel().getSelectedItem();
+                if(g == null)
+                    return;
+                btnModificarCliente.setDisable(false);
+                btnBorrarCliente.setDisable(false);
+                txtSeguroSocialCliente.setText(g.getSeguroSocial());
+                txtNombreCliente.setText(g.getNombreCliente());
+                txtCiudadCliente.setText(g.getCiudad());
+                txtCalleCliente.setText(g.getCalle());
+                actionsCliente.setVisible(true);
+                agregandoCliente = false;
+            }
+        });
+        btnAgregarCliente.setOnMouseClicked(new EventHandler<MouseEvent>(){
+            @Override
+            public void handle(MouseEvent event) {
+                if(agregandoCliente){
+                    if(txtSeguroSocialCliente.getText().trim().length() > 0 && txtNombreCliente.getText().trim().length() > 0 && txtCiudadCliente.getText().trim().length() > 0 && txtCalleCliente.getText().trim().length() > 0){
+                        if(clientedao.isDuplicated(txtSeguroSocialCliente.getText())){
                             Alert msg = new Alert(Alert.AlertType.INFORMATION);
                             msg.setTitle("Modificar");
                             msg.setHeaderText("Cliente");
-                            msg.setContentText("No se puede modificar");
+                            msg.setContentText("Seguro social ya existente");
                             msg.show();
+                            return;
+                        }
+                        clientedao.insert(new Cliente(txtSeguroSocialCliente.getText(),txtNombreCliente.getText(),txtCiudadCliente.getText(),txtCalleCliente.getText()));
+                        Alert msg = new Alert(Alert.AlertType.INFORMATION);
+                        msg.setTitle("Guardar");
+                        msg.setHeaderText("Cliente");
+                        msg.setContentText("Información guardada correctamente");
+                        Optional<ButtonType> respuesta = msg.showAndWait();
+                        if(respuesta.get() == ButtonType.OK){
+                            tableCliente.setItems(clientedao.findAll());
+                            agregandoCliente = false;
+                            actionsCliente.setVisible(false);
+                        }
+                    }
+                    else{
+                        Alert msg = new Alert(Alert.AlertType.INFORMATION);
+                        msg.setTitle("Guardar");
+                        msg.setHeaderText("Cliente");
+                        msg.setContentText("Hay que poner bien la información");
+                        msg.show();
+
+                    }
+                }
+                else{
+                    btnModificarCliente.setDisable(true);
+                    btnBorrarCliente.setDisable(true);
+                    txtNombreCliente.setText("");
+                    txtCiudadCliente.setText("");
+                    txtCalleCliente.setText("");
+                    actionsCliente.setVisible(true);
+                    agregandoCliente = true;
+                }
+            }
+        });
+        btnModificarCliente.setOnMouseClicked(new EventHandler<MouseEvent>(){
+            @Override
+            public void handle(MouseEvent event) {
+                Cliente g = tableCliente.getSelectionModel().getSelectedItem();
+                if(txtSeguroSocialCliente.getText().trim().length() > 0 && txtNombreCliente.getText().trim().length() > 0 && txtCiudadCliente.getText().trim().length() > 0 && txtCalleCliente.getText().trim().length() > 0){
+                    String seguroSocial = g.getSeguroSocial();
+                    if(!seguroSocial.equals(txtSeguroSocialCliente.getText()) && clientedao.isDuplicated(txtSeguroSocialCliente.getText())){
+                        Alert msg = new Alert(Alert.AlertType.INFORMATION);
+                        msg.setTitle("Modificar");
+                        msg.setHeaderText("Cliente");
+                        msg.setContentText("Seguro social ya existente");
+                        msg.show();
+                        return;
+                    }
+                    g.setSeguroSocial(txtSeguroSocialCliente.getText());
+                    g.setNombreCliente(txtNombreCliente.getText());
+                    g.setCiudad(txtCiudadCliente.getText());
+                    g.setCalle(txtCalleCliente.getText());
+                    if(clientedao.update(seguroSocial,g)){
+                        Alert msg = new Alert(Alert.AlertType.INFORMATION);
+                        msg.setTitle("Borrar");
+                        msg.setHeaderText("Cliente");
+                        msg.setContentText("Cliente modificado correctamente");
+                        Optional<ButtonType> respuesta = msg.showAndWait();
+                        if(respuesta.get() == ButtonType.OK){
+                            tableCliente.setItems(clientedao.findAll());
+                            actionsCliente.setVisible(false);
                         }
                     }
                     else{
                         Alert msg = new Alert(Alert.AlertType.INFORMATION);
                         msg.setTitle("Modificar");
                         msg.setHeaderText("Cliente");
-                        msg.setContentText("Hay que poner bien la información");
+                        msg.setContentText("No se puede modificar");
                         msg.show();
                     }
                 }
-            });
-            btnBorrar.setOnMouseClicked(new EventHandler<MouseEvent>(){
-                @Override
-                public void handle(MouseEvent event) {
-                    Cliente g = table.getSelectionModel().getSelectedItem();
-                    if(clientedao.delete(g.getSeguroSocial())){
-                        Alert msg = new Alert(Alert.AlertType.INFORMATION);
-                        msg.setTitle("Borrar");
-                        msg.setHeaderText("Cliente");
-                        msg.setContentText("Cliente borrado correctamente");
-                        Optional<ButtonType> respuesta = msg.showAndWait();
-                        if(respuesta.get() == ButtonType.OK){
-                            table.setItems(clientedao.findAll());
-                            actions.setVisible(false);
-                        }
-                    }
-                    else{
-                        Alert msg = new Alert(Alert.AlertType.INFORMATION);
-                        msg.setTitle("Borrar");
-                        msg.setHeaderText("Cliente");
-                        msg.setContentText("No se puede borrar");
-                        msg.show();
+                else{
+                    Alert msg = new Alert(Alert.AlertType.INFORMATION);
+                    msg.setTitle("Modificar");
+                    msg.setHeaderText("Cliente");
+                    msg.setContentText("Hay que poner bien la información");
+                    msg.show();
+                }
+            }
+        });
+        btnBorrarCliente.setOnMouseClicked(new EventHandler<MouseEvent>(){
+            @Override
+            public void handle(MouseEvent event) {
+                Cliente g = tableCliente.getSelectionModel().getSelectedItem();
+                if(clientedao.delete(g.getSeguroSocial())){
+                    Alert msg = new Alert(Alert.AlertType.INFORMATION);
+                    msg.setTitle("Borrar");
+                    msg.setHeaderText("Cliente");
+                    msg.setContentText("Cliente borrado correctamente");
+                    Optional<ButtonType> respuesta = msg.showAndWait();
+                    if(respuesta.get() == ButtonType.OK){
+                        tableCliente.setItems(clientedao.findAll());
+                        actionsCliente.setVisible(false);
                     }
                 }
-            });
-        }   // END Initialize 
+                else{
+                    Alert msg = new Alert(Alert.AlertType.INFORMATION);
+                    msg.setTitle("Borrar");
+                    msg.setHeaderText("Cliente");
+                    msg.setContentText("No se puede borrar");
+                    msg.show();
+                }
+            }
+        });
+    }   // END Initialize 
     
 }

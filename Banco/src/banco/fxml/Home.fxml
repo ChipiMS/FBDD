@@ -8,14 +8,12 @@
 
 <VBox alignment="CENTER" xmlns:fx="http://javafx.com/fxml/1" id="AnchorPane" prefHeight="400.0" prefWidth="600.0" fx:controller="banco.fxml.HomeController">
     <Label text="Bienvenidos al servicio de banco" style="-fx-font-size: 22px" />
-    <Label text="" />
-    <Button fx:id="btnEmpleados" text="Empleados" style="spacing:10px"  />
-    <Label text="" />
+    <Button fx:id="btnEmpleados" text="Empleados"/>
+    <Button fx:id="btnTipoEmpleados" text="Tipos de empleados"/>
     <Button fx:id="btnSucursales" text="Sucursales" />
-    <Label text="" />
     <Button fx:id="btnClientes" text="Clientes" />
-    <Label text="" />
     <Button fx:id="btnCuentas" text="Cuentas" />
-    <Label text="" />
+    <Button fx:id="btnTipoCuentas" text="Tipos de cuentas" />
     <Button fx:id="btnTransacciones" text="Transacciones" />
+    <Button fx:id="btnTipoTransacciones" text="Tipos de transacciones" />
 </VBox>

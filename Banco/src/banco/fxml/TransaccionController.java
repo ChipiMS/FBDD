@@ -39,19 +39,19 @@ import javafx.stage.Stage;
 public class TransaccionController implements Initializable {
 
     @FXML
-    Button btnAgregar, btnModificar, btnBorrar, btnCuentas;
+    Button btnAgregarTransacciones, btnModificarTransacciones, btnBorrarTransacciones;
     @FXML
-    GridPane actions;
+    GridPane actionsTransacciones;
     @FXML
-    TextField txtCantidad;
+    TextField txtCantidadTransacciones;
     @FXML
     //DD-MM-AAAA
-    TextField txtFecha;
+    TextField txtFechaTransacciones;
     @FXML
-    TableView<Transaccion> table;
+    TableView<Transaccion> tableTransacciones;
     @FXML
-    ComboBox<Cuenta> cmbCuenta;
-    Boolean agregando = false, show = true;
+    ComboBox<Cuenta> cmbCuentaTransacciones;
+    Boolean agregandoTransacciones = false;
 
     TransaccionDAO transaccion;
     List<Cuenta> cuentas;
@@ -76,40 +76,35 @@ public class TransaccionController implements Initializable {
         
         transaccion = new TransaccionDAO(db.getConnection());
         cuentas = transaccion.findAllCuenta();
-        cmbCuenta.getItems().addAll(cuentas);
-        table.getColumns().addAll(numCuenta, saldo, seguroSocial, numSucursal);
-        table.setItems(transacciondao.findAll());
-        table.setOnMouseClicked(new EventHandler<MouseEvent>() {
+        cmbCuentaTransacciones.getItems().addAll(cuentas);
+        tableTransacciones.getColumns().addAll(numCuenta, saldo, seguroSocial, numSucursal);
+        tableTransacciones.setItems(transacciondao.findAll());
+        tableTransacciones.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                show = true;
-                try {
-                    Transaccion g = table.getSelectionModel().getSelectedItem();
-                    txtCantidad.setText(g.getCantidad()+ "");
-                    txtFecha.setText(g.getFecha() + "");
-                    for(int i=0;i<cuentas.size();i++){
-                        if(g.getNumCuenta() == cuentas.get(i).getNumCuenta()){
-                            cmbCuenta.getSelectionModel().clearAndSelect(i);
-                        }
+                Transaccion g = tableTransacciones.getSelectionModel().getSelectedItem();
+                if(g == null)
+                    return;
+                txtCantidadTransacciones.setText(g.getCantidad()+ "");
+                txtFechaTransacciones.setText(g.getFecha() + "");
+                for(int i=0;i<cuentas.size();i++){
+                    if(g.getNumCuenta() == cuentas.get(i).getNumCuenta()){
+                        cmbCuentaTransacciones.getSelectionModel().clearAndSelect(i);
                     }
-                } catch (Exception e) {
-                    show = false;
                 }
-                if (show){
-                    btnModificar.setDisable(false);
-                    btnBorrar.setDisable(false);
-                    actions.setVisible(true);
-                    agregando = false;
-                }
+                btnModificarTransacciones.setDisable(false);
+                btnBorrarTransacciones.setDisable(false);
+                actionsTransacciones.setVisible(true);
+                agregandoTransacciones = false;
             }
         });
-        btnAgregar.setOnMouseClicked(new EventHandler<MouseEvent>() {
+        btnAgregarTransacciones.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                if (agregando) {
+                if (agregandoTransacciones) {
                     //new Transaccion(cantidad, fecha, numCuenta)
-                    if (txtCantidad.getText().trim().length() > 0 && txtFecha.getText().trim().length() > 0 && cmbCuenta.getSelectionModel().getSelectedItem() != null) {
-                        if(!valida(txtCantidad.getText())){
+                    if (txtCantidadTransacciones.getText().trim().length() > 0 && txtFechaTransacciones.getText().trim().length() > 0 && cmbCuentaTransacciones.getSelectionModel().getSelectedItem() != null) {
+                        if(!valida(txtCantidadTransacciones.getText())){
                             Alert msg = new Alert(Alert.AlertType.INFORMATION);
                             msg.setTitle("Guardar");
                             msg.setHeaderText("Transacción");
@@ -117,17 +112,17 @@ public class TransaccionController implements Initializable {
                             msg.show();
                             return;
                         }
-                        transacciondao.insert(new Transaccion(Integer.parseInt(txtCantidad.getText()), txtFecha.getText(), Integer.parseInt(cmbCuenta.getSelectionModel().getSelectedItem().toString())));
-                        //transacciondao.insert(new Transaccion(Integer.parseInt(txtCantidad.getText()), txtFecha.getText(), Integer.parseInt(cmbCuenta.getSelectionModel().getSelectedItem().toString())));
+                        transacciondao.insert(new Transaccion(Integer.parseInt(txtCantidadTransacciones.getText()), txtFechaTransacciones.getText(), Integer.parseInt(cmbCuentaTransacciones.getSelectionModel().getSelectedItem().toString())));
+                        //transacciondao.insert(new Transaccion(Integer.parseInt(txtCantidadTransacciones.getText()), txtFechaTransacciones.getText(), Integer.parseInt(cmbCuentaTransacciones.getSelectionModel().getSelectedItem().toString())));
                         Alert msg = new Alert(Alert.AlertType.INFORMATION);
                         msg.setTitle("Guardar");
                         msg.setHeaderText("Transacción");
                         msg.setContentText("Información guardada correctamente");
                         Optional<ButtonType> respuesta = msg.showAndWait();
                         if (respuesta.get() == ButtonType.OK) {
-                            table.setItems(transacciondao.findAll());
-                            agregando = false;
-                            actions.setVisible(false);
+                            tableTransacciones.setItems(transacciondao.findAll());
+                            agregandoTransacciones = false;
+                            actionsTransacciones.setVisible(false);
                         }
                     } else {
                         Alert msg = new Alert(Alert.AlertType.INFORMATION);
@@ -138,22 +133,22 @@ public class TransaccionController implements Initializable {
 
                     }
                 } else {
-                    btnModificar.setDisable(true);
-                    btnBorrar.setDisable(true);
-                    txtCantidad.setText("");
-                    txtFecha.setText("");
-                    cmbCuenta.getSelectionModel().clearSelection();
-                    actions.setVisible(true);
-                    agregando = true;
+                    btnModificarTransacciones.setDisable(true);
+                    btnBorrarTransacciones.setDisable(true);
+                    txtCantidadTransacciones.setText("");
+                    txtFechaTransacciones.setText("");
+                    cmbCuentaTransacciones.getSelectionModel().clearSelection();
+                    actionsTransacciones.setVisible(true);
+                    agregandoTransacciones = true;
                 }
             }
         });
-        btnModificar.setOnMouseClicked(new EventHandler<MouseEvent>() {
+        btnModificarTransacciones.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                Transaccion g = table.getSelectionModel().getSelectedItem();
-                if (txtCantidad.getText().trim().length() > 0 && txtFecha.getText().trim().length() > 0 && cmbCuenta.getSelectionModel().getSelectedItem() != null) {
-                    if(!valida(txtCantidad.getText())){
+                Transaccion g = tableTransacciones.getSelectionModel().getSelectedItem();
+                if (txtCantidadTransacciones.getText().trim().length() > 0 && txtFechaTransacciones.getText().trim().length() > 0 && cmbCuentaTransacciones.getSelectionModel().getSelectedItem() != null) {
+                    if(!valida(txtCantidadTransacciones.getText())){
                         Alert msg = new Alert(Alert.AlertType.INFORMATION);
                         msg.setTitle("Modificar");
                         msg.setHeaderText("Transacción");
@@ -161,9 +156,9 @@ public class TransaccionController implements Initializable {
                         msg.show();
                         return;
                     }
-                    g.setCantidad(Integer.parseInt(txtCantidad.getText()));
-                    g.setFecha(txtFecha.getText());
-                    g.setNumCuenta(Integer.parseInt(cmbCuenta.getSelectionModel().getSelectedItem().toString()));
+                    g.setCantidad(Integer.parseInt(txtCantidadTransacciones.getText()));
+                    g.setFecha(txtFechaTransacciones.getText());
+                    g.setNumCuenta(Integer.parseInt(cmbCuentaTransacciones.getSelectionModel().getSelectedItem().toString()));
                     if (transacciondao.update(g)) {
                         Alert msg = new Alert(Alert.AlertType.INFORMATION);
                         msg.setTitle("Borrar");
@@ -171,8 +166,8 @@ public class TransaccionController implements Initializable {
                         msg.setContentText("Transacción modificada correctamente");
                         Optional<ButtonType> respuesta = msg.showAndWait();
                         if (respuesta.get() == ButtonType.OK) {
-                            table.setItems(transacciondao.findAll());
-                            actions.setVisible(false);
+                            tableTransacciones.setItems(transacciondao.findAll());
+                            actionsTransacciones.setVisible(false);
                         }
                     } else {
                         Alert msg = new Alert(Alert.AlertType.INFORMATION);
@@ -190,10 +185,10 @@ public class TransaccionController implements Initializable {
                 }
             }
         });
-        btnBorrar.setOnMouseClicked(new EventHandler<MouseEvent>() {
+        btnBorrarTransacciones.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                Transaccion g = table.getSelectionModel().getSelectedItem();
+                Transaccion g = tableTransacciones.getSelectionModel().getSelectedItem();
                 if (transacciondao.delete(g.getNumTran())) {
                     Alert msg = new Alert(Alert.AlertType.INFORMATION);
                     msg.setTitle("Borrar");
@@ -201,8 +196,8 @@ public class TransaccionController implements Initializable {
                     msg.setContentText("Transacción borrada correctamente");
                     Optional<ButtonType> respuesta = msg.showAndWait();
                     if (respuesta.get() == ButtonType.OK) {
-                        table.setItems(transacciondao.findAll());
-                        actions.setVisible(false);
+                        tableTransacciones.setItems(transacciondao.findAll());
+                        actionsTransacciones.setVisible(false);
                     }
                 } else {
                     Alert msg = new Alert(Alert.AlertType.INFORMATION);
@@ -212,23 +207,6 @@ public class TransaccionController implements Initializable {
                     msg.show();
                 }
             }
-        });
-        btnCuentas.setOnMouseClicked(new EventHandler<MouseEvent>(){
-            @Override
-            public void handle(MouseEvent event) {
-                FXMLLoader loader = new FXMLLoader();
-                Parent rootConsultaPersonas = null;
-                try {
-                    rootConsultaPersonas = loader.load(getClass().getResource("Cuenta.fxml"));
-                    Scene scene = new Scene(rootConsultaPersonas);
-                    Stage stage = new Stage();
-                    stage.setScene(scene);
-                    stage.show();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            
         });
     }
     Boolean valida(String toValidate){

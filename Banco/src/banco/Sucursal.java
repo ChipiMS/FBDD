@@ -52,7 +52,7 @@ public class Sucursal {
 
     @Override
     public String toString() {
-        return numSucursal + "";
+        return nombreSucursal;
     }
 
 }

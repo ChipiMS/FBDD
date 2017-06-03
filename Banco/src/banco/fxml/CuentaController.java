@@ -40,18 +40,18 @@ import javafx.stage.Stage;
 public class CuentaController implements Initializable {
 
     @FXML
-    Button btnAgregar, btnModificar, btnBorrar, btnClientes, btnSucursales;
+    Button btnAgregarCuenta, btnModificarCuenta, btnBorrarCuenta;
     @FXML
-    GridPane actions;
+    GridPane actionsCuenta;
     @FXML
-    TextField txtSaldo;
+    TextField txtSaldoCuenta;
     @FXML
-    TableView<Cuenta> table;
+    TableView<Cuenta> tableCuenta;
     @FXML
-    ComboBox<Sucursal> cmbSucursal;
+    ComboBox<Sucursal> cmbSucursalCuenta;
     @FXML
-    ComboBox<Cliente> cmbCliente;
-    Boolean agregando = false, show = true;
+    ComboBox<Cliente> cmbClienteCuenta;
+    Boolean agregandoCuenta = false;
 
     CuentaDAO cuenta;
     List<Sucursal> sucursales;
@@ -63,59 +63,55 @@ public class CuentaController implements Initializable {
         db.Connect();
         CuentaDAO cuentadao = new CuentaDAO(db.getConnection());
 
-        TableColumn numCuenta = new TableColumn("Número");
-        numCuenta.setCellValueFactory(new PropertyValueFactory("numCuenta"));
+        TableColumn numCuentaCuenta = new TableColumn("Número");
+        numCuentaCuenta.setCellValueFactory(new PropertyValueFactory("numCuenta"));
 
-        TableColumn saldo = new TableColumn("Saldo");
-        saldo.setCellValueFactory(new PropertyValueFactory("saldo"));
+        TableColumn saldoCuenta = new TableColumn("Saldo");
+        saldoCuenta.setCellValueFactory(new PropertyValueFactory("saldo"));
 
-        TableColumn seguroSocial = new TableColumn("Seguro Social");
-        seguroSocial.setCellValueFactory(new PropertyValueFactory("seguroSocial"));
+        TableColumn seguroSocialCuenta = new TableColumn("Seguro Social");
+        seguroSocialCuenta.setCellValueFactory(new PropertyValueFactory("seguroSocial"));
 
-        TableColumn numSucursal = new TableColumn("Núm. Sucursal");
-        numSucursal.setCellValueFactory(new PropertyValueFactory("numSucursal"));
+        TableColumn numSucursalCuenta = new TableColumn("Núm. Sucursal");
+        numSucursalCuenta.setCellValueFactory(new PropertyValueFactory("numSucursal"));
         
         cuenta = new CuentaDAO(db.getConnection());
         clientes = cuenta.findAllCliente();
-        cmbCliente.getItems().addAll(clientes);
+        cmbClienteCuenta.getItems().addAll(clientes);
         sucursales = cuenta.findAllSuc();
-        cmbSucursal.getItems().addAll(sucursales);
-        table.getColumns().addAll(numCuenta, saldo, seguroSocial, numSucursal);
-        table.setItems(cuentadao.findAll());
-        table.setOnMouseClicked(new EventHandler<MouseEvent>() {
+        cmbSucursalCuenta.getItems().addAll(sucursales);
+        tableCuenta.getColumns().addAll(numCuentaCuenta, saldoCuenta, seguroSocialCuenta, numSucursalCuenta);
+        tableCuenta.setItems(cuentadao.findAll());
+        tableCuenta.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                show = true;
-                try {
-                    Cuenta g = table.getSelectionModel().getSelectedItem();
-                    txtSaldo.setText(g.getSaldo() + "");
-                    for(int i=0;i<sucursales.size();i++){
-                        if(sucursales.get(i).getNumSucursal() == g.getNumSucursal()){
-                            cmbSucursal.getSelectionModel().clearAndSelect(i);
-                        }
-                    }
-                    for(int i=0;i<clientes.size();i++){
-                        if(g.getSeguroSocial().equals(clientes.get(i).getSeguroSocial()+"")){
-                            cmbCliente.getSelectionModel().clearAndSelect(i);
-                        }
-                    }
-                } catch (Exception e) {
-                    show = false;
+                Cuenta g = tableCuenta.getSelectionModel().getSelectedItem();
+                if(g == null){
+                    return;
                 }
-                if (show){
-                    btnModificar.setDisable(false);
-                    btnBorrar.setDisable(false);
-                    actions.setVisible(true);
-                    agregando = false;
+                txtSaldoCuenta.setText(g.getSaldo() + "");
+                for(int i=0;i<sucursales.size();i++){
+                    if(sucursales.get(i).getNumSucursal() == g.getNumSucursal()){
+                        cmbSucursalCuenta.getSelectionModel().clearAndSelect(i);
+                    }
                 }
+                for(int i=0;i<clientes.size();i++){
+                    if(g.getSeguroSocial().equals(clientes.get(i).getSeguroSocial()+"")){
+                        cmbClienteCuenta.getSelectionModel().clearAndSelect(i);
+                    }
+                }
+                btnModificarCuenta.setDisable(false);
+                btnBorrarCuenta.setDisable(false);
+                actionsCuenta.setVisible(true);
+                agregandoCuenta = false;
             }
         });
-        btnAgregar.setOnMouseClicked(new EventHandler<MouseEvent>() {
+        btnAgregarCuenta.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                if (agregando) {
-                    if (txtSaldo.getText().trim().length() > 0 && cmbCliente.getSelectionModel().getSelectedItem() != null && cmbSucursal.getSelectionModel().getSelectedItem() != null) {
-                        if(!valida(txtSaldo.getText())){
+                if (agregandoCuenta) {
+                    if (txtSaldoCuenta.getText().trim().length() > 0 && cmbClienteCuenta.getSelectionModel().getSelectedItem() != null && cmbSucursalCuenta.getSelectionModel().getSelectedItem() != null) {
+                        if(!valida(txtSaldoCuenta.getText())){
                             Alert msg = new Alert(Alert.AlertType.INFORMATION);
                             msg.setTitle("Guardar");
                             msg.setHeaderText("Cuenta");
@@ -123,16 +119,16 @@ public class CuentaController implements Initializable {
                             msg.show();
                             return;
                         }
-                        cuentadao.insert(new Cuenta(Double.parseDouble(txtSaldo.getText()), cmbCliente.getSelectionModel().getSelectedItem().toString() + "", Integer.parseInt(cmbSucursal.getSelectionModel().getSelectedItem().toString())));
+                        cuentadao.insert(new Cuenta(Double.parseDouble(txtSaldoCuenta.getText()), cmbClienteCuenta.getSelectionModel().getSelectedItem().getSeguroSocial(),cmbSucursalCuenta.getSelectionModel().getSelectedItem().getNumSucursal()));
                         Alert msg = new Alert(Alert.AlertType.INFORMATION);
                         msg.setTitle("Guardar");
                         msg.setHeaderText("Cuenta");
                         msg.setContentText("Información guardada correctamente");
                         Optional<ButtonType> respuesta = msg.showAndWait();
                         if (respuesta.get() == ButtonType.OK) {
-                            table.setItems(cuentadao.findAll());
-                            agregando = false;
-                            actions.setVisible(false);
+                            tableCuenta.setItems(cuentadao.findAll());
+                            agregandoCuenta = false;
+                            actionsCuenta.setVisible(false);
                         }
                     } else {
                         Alert msg = new Alert(Alert.AlertType.INFORMATION);
@@ -143,22 +139,22 @@ public class CuentaController implements Initializable {
 
                     }
                 } else {
-                    btnModificar.setDisable(true);
-                    btnBorrar.setDisable(true);
-                    txtSaldo.setText("");
-                    cmbCliente.getSelectionModel().clearSelection();
-                    cmbSucursal.getSelectionModel().clearSelection();
-                    actions.setVisible(true);
-                    agregando = true;
+                    btnModificarCuenta.setDisable(true);
+                    btnBorrarCuenta.setDisable(true);
+                    txtSaldoCuenta.setText("");
+                    cmbClienteCuenta.getSelectionModel().clearSelection();
+                    cmbSucursalCuenta.getSelectionModel().clearSelection();
+                    actionsCuenta.setVisible(true);
+                    agregandoCuenta = true;
                 }
             }
         });
-        btnModificar.setOnMouseClicked(new EventHandler<MouseEvent>() {
+        btnModificarCuenta.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                Cuenta g = table.getSelectionModel().getSelectedItem();
-                if (txtSaldo.getText().trim().length() > 0 && cmbCliente.getSelectionModel().getSelectedItem() != null && cmbSucursal.getSelectionModel().getSelectedItem() != null) {
-                    if(!valida(txtSaldo.getText())){
+                Cuenta g = tableCuenta.getSelectionModel().getSelectedItem();
+                if (txtSaldoCuenta.getText().trim().length() > 0 && cmbClienteCuenta.getSelectionModel().getSelectedItem() != null && cmbSucursalCuenta.getSelectionModel().getSelectedItem() != null) {
+                    if(!valida(txtSaldoCuenta.getText())){
                         Alert msg = new Alert(Alert.AlertType.INFORMATION);
                         msg.setTitle("Modificar");
                         msg.setHeaderText("Cuenta");
@@ -166,9 +162,9 @@ public class CuentaController implements Initializable {
                         msg.show();
                         return;
                     }
-                    g.setSaldo(Double.parseDouble(txtSaldo.getText()));
-                    g.setSeguroSocial(cmbCliente.getSelectionModel().getSelectedItem().toString());
-                    g.setNumSucursal(Integer.parseInt(cmbSucursal.getSelectionModel().getSelectedItem().toString()));
+                    g.setSaldo(Double.parseDouble(txtSaldoCuenta.getText()));
+                    g.setSeguroSocial(cmbClienteCuenta.getSelectionModel().getSelectedItem().toString());
+                    g.setNumSucursal(Integer.parseInt(cmbSucursalCuenta.getSelectionModel().getSelectedItem().toString()));
                     if (cuentadao.update(g)) {
                         Alert msg = new Alert(Alert.AlertType.INFORMATION);
                         msg.setTitle("Modificar");
@@ -176,8 +172,8 @@ public class CuentaController implements Initializable {
                         msg.setContentText("Cuenta modificada correctamente");
                         Optional<ButtonType> respuesta = msg.showAndWait();
                         if (respuesta.get() == ButtonType.OK) {
-                            table.setItems(cuentadao.findAll());
-                            actions.setVisible(false);
+                            tableCuenta.setItems(cuentadao.findAll());
+                            actionsCuenta.setVisible(false);
                         }
                     } else {
                         Alert msg = new Alert(Alert.AlertType.INFORMATION);
@@ -195,10 +191,10 @@ public class CuentaController implements Initializable {
                 }
             }
         });
-        btnBorrar.setOnMouseClicked(new EventHandler<MouseEvent>() {
+        btnBorrarCuenta.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                Cuenta g = table.getSelectionModel().getSelectedItem();
+                Cuenta g = tableCuenta.getSelectionModel().getSelectedItem();
                 if (cuentadao.delete(g.getNumCuenta())) {
                     Alert msg = new Alert(Alert.AlertType.INFORMATION);
                     msg.setTitle("Borrar");
@@ -206,8 +202,8 @@ public class CuentaController implements Initializable {
                     msg.setContentText("Cuenta borrado correctamente");
                     Optional<ButtonType> respuesta = msg.showAndWait();
                     if (respuesta.get() == ButtonType.OK) {
-                        table.setItems(cuentadao.findAll());
-                        actions.setVisible(false);
+                        tableCuenta.setItems(cuentadao.findAll());
+                        actionsCuenta.setVisible(false);
                     }
                 } else {
                     Alert msg = new Alert(Alert.AlertType.INFORMATION);
@@ -217,42 +213,6 @@ public class CuentaController implements Initializable {
                     msg.show();
                 }
             }
-        });
-        
-        btnClientes.setOnMouseClicked(new EventHandler<MouseEvent>(){
-            @Override
-            public void handle(MouseEvent event) {
-                FXMLLoader loader = new FXMLLoader();
-                Parent rootConsultaPersonas = null;
-                try {
-                    rootConsultaPersonas = loader.load(getClass().getResource("Cliente.fxml"));
-                    Scene scene = new Scene(rootConsultaPersonas);
-                    Stage stage = new Stage();
-                    stage.setScene(scene);
-                    stage.show();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            
-        });
-        
-        btnSucursales.setOnMouseClicked(new EventHandler<MouseEvent>(){
-            @Override
-            public void handle(MouseEvent event) {
-                FXMLLoader loader = new FXMLLoader();
-                Parent rootConsultaPersonas = null;
-                try {
-                    rootConsultaPersonas = loader.load(getClass().getResource("Sucursales.fxml"));
-                    Scene scene = new Scene(rootConsultaPersonas);
-                    Stage stage = new Stage();
-                    stage.setScene(scene);
-                    stage.show();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            
         });
     }
     Boolean valida(String porValidar){

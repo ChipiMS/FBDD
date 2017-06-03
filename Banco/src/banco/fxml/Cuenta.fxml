@@ -7,20 +7,19 @@
 <?import javafx.scene.layout.*?>
 
 <VBox prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="banco.fxml.CuentaController">
-    <TableView fx:id="table"></TableView>
-    <GridPane fx:id="actions" visible="false">
+    <Label text="Cuentas"></Label>
+    <TableView fx:id="tableCuenta"></TableView>
+    <GridPane fx:id="actionsCuenta" visible="false">
         <Label text="Saldo " GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-        <TextField fx:id="txtSaldo" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
-        <Label text="Seguro Social " GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-        <ComboBox fx:id="cmbCliente" GridPane.columnIndex="1" GridPane.rowIndex="1"/> 
-        <Button fx:id="btnClientes" text="Ver Clientes" GridPane.columnIndex="2" GridPane.rowIndex="1" visible="false"/>
-        <Label text="Número Sucursal " GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-        <ComboBox fx:id="cmbSucursal" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
-        <Button fx:id="btnSucursales" text="Ver Sucursales" GridPane.columnIndex="2" GridPane.rowIndex="2" visible="false" />
+        <TextField fx:id="txtSaldoCuenta" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+        <Label text="Titular" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        <ComboBox fx:id="cmbClienteCuenta" GridPane.columnIndex="1" GridPane.rowIndex="1"/> 
+        <Label text="Sucursal" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+        <ComboBox fx:id="cmbSucursalCuenta" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
     </GridPane>
     <HBox>
-        <Button fx:id="btnAgregar" text="Agregar"></Button>
-        <Button fx:id="btnModificar" text="Modificar" disable="true" ></Button>
-        <Button fx:id="btnBorrar" text="Borrar" disable="true" ></Button>
+        <Button fx:id="btnAgregarCuenta" text="Agregar"></Button>
+        <Button fx:id="btnModificarCuenta" text="Modificar" disable="true" ></Button>
+        <Button fx:id="btnBorrarCuenta" text="Borrar" disable="true" ></Button>
     </HBox>
 </VBox>

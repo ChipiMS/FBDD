@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="banco.fxml.TipoEmpleadoController">
+    <Label text="Tipo empleado"></Label>
+    <TableView fx:id="table"></TableView>
+    <GridPane fx:id="actions" visible="false">
+        <Label text="Clave" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+        <TextField fx:id="txtClave" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+        <Label text="Descripción" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        <TextField fx:id="txtDescripcion" GridPane.columnIndex="1" GridPane.rowIndex="1"/> 
+    </GridPane>
+    <HBox>
+        <Button fx:id="btnAgregar" text="Agregar"></Button>
+        <Button fx:id="btnModificar" text="Modificar" disable="true" ></Button>
+        <Button fx:id="btnBorrar" text="Borrar" disable="true" ></Button>
+    </HBox>
+</VBox>

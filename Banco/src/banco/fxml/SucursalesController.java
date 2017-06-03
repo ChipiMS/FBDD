@@ -20,64 +20,64 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 public class SucursalesController implements Initializable {
     @FXML
-    Button btnAgregar,btnModificar,btnBorrar;
+    Button btnAgregarSucursales,btnModificarSucursales,btnBorrarSucursales;
     @FXML
-    GridPane actions;
+    GridPane actionsSucursales;
     @FXML
-    TextField txtNombre,txtCiudad,txtDireccion;
+    TextField txtNombreSucursales,txtCiudadSucursales,txtDireccionSucursales;
     @FXML
-    TableView<Sucursal> table;
-    Boolean agregando = false;
+    TableView<Sucursal> tableSucursales;
+    Boolean agregandoSucursales = false;
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         MySQL db = new MySQL();
         db.Connect();
         SucursalDAO sucursaldao = new SucursalDAO(db.getConnection());
         
-        TableColumn nombres = new TableColumn("Número");
-        nombres.setCellValueFactory(new PropertyValueFactory("numSucursal"));
+        TableColumn nombresSucursales = new TableColumn("Número");
+        nombresSucursales.setCellValueFactory(new PropertyValueFactory("numSucursal"));
         
-        TableColumn apellidos = new TableColumn("Nombre");
-        apellidos.setCellValueFactory(new PropertyValueFactory("nombreSucursal"));
+        TableColumn apellidosSucursales = new TableColumn("Nombre");
+        apellidosSucursales.setCellValueFactory(new PropertyValueFactory("nombreSucursal"));
         
-        TableColumn telefono = new TableColumn("Ciudad");
-        telefono.setCellValueFactory(new PropertyValueFactory("ciudad"));
+        TableColumn telefonoSucursales = new TableColumn("Ciudad");
+        telefonoSucursales.setCellValueFactory(new PropertyValueFactory("ciudad"));
         
-        TableColumn domicilio = new TableColumn("Dirección");
-        domicilio.setCellValueFactory(new PropertyValueFactory("direccion"));
+        TableColumn domicilioSucursales = new TableColumn("Dirección");
+        domicilioSucursales.setCellValueFactory(new PropertyValueFactory("direccion"));
         
-        table.getColumns().addAll(nombres,apellidos,telefono,domicilio);
-        table.setItems(sucursaldao.findAll());
-        table.setOnMouseClicked(new EventHandler<MouseEvent>(){
+        tableSucursales.getColumns().addAll(nombresSucursales,apellidosSucursales,telefonoSucursales,domicilioSucursales);
+        tableSucursales.setItems(sucursaldao.findAll());
+        tableSucursales.setOnMouseClicked(new EventHandler<MouseEvent>(){
             @Override
             public void handle(MouseEvent event) {
-                Sucursal g = table.getSelectionModel().getSelectedItem();
+                Sucursal g = tableSucursales.getSelectionModel().getSelectedItem();
                 if(g == null)
                     return;
-                btnModificar.setDisable(false);
-                btnBorrar.setDisable(false);
-                txtNombre.setText(g.getNombreSucursal());
-                txtCiudad.setText(g.getCiudad());
-                txtDireccion.setText(g.getDireccion());
-                actions.setVisible(true);
-                agregando = false;
+                btnModificarSucursales.setDisable(false);
+                btnBorrarSucursales.setDisable(false);
+                txtNombreSucursales.setText(g.getNombreSucursal());
+                txtCiudadSucursales.setText(g.getCiudad());
+                txtDireccionSucursales.setText(g.getDireccion());
+                actionsSucursales.setVisible(true);
+                agregandoSucursales = false;
             }
         });
-        btnAgregar.setOnMouseClicked(new EventHandler<MouseEvent>(){
+        btnAgregarSucursales.setOnMouseClicked(new EventHandler<MouseEvent>(){
             @Override
             public void handle(MouseEvent event) {
-                if(agregando){
-                    if(txtNombre.getText().trim().length() > 0 && txtCiudad.getText().trim().length() > 0 && txtDireccion.getText().trim().length() > 0){
-                        sucursaldao.insert(new Sucursal(txtNombre.getText(),txtCiudad.getText(),txtDireccion.getText()));
+                if(agregandoSucursales){
+                    if(txtNombreSucursales.getText().trim().length() > 0 && txtCiudadSucursales.getText().trim().length() > 0 && txtDireccionSucursales.getText().trim().length() > 0){
+                        sucursaldao.insert(new Sucursal(txtNombreSucursales.getText(),txtCiudadSucursales.getText(),txtDireccionSucursales.getText()));
                         Alert msg = new Alert(Alert.AlertType.INFORMATION);
                         msg.setTitle("Crear");
                         msg.setHeaderText("Sucursal");
                         msg.setContentText("Información guardada correctamente");
                         Optional<ButtonType> respuesta = msg.showAndWait();
                         if(respuesta.get() == ButtonType.OK){
-                            table.setItems(sucursaldao.findAll());
-                            agregando = false;
-                            actions.setVisible(false);
+                            tableSucursales.setItems(sucursaldao.findAll());
+                            agregandoSucursales = false;
+                            actionsSucursales.setVisible(false);
                         }
                     }
                     else{
@@ -90,24 +90,24 @@ public class SucursalesController implements Initializable {
                     }
                 }
                 else{
-                    btnModificar.setDisable(true);
-                    btnBorrar.setDisable(true);
-                    txtNombre.setText("");
-                    txtCiudad.setText("");
-                    txtDireccion.setText("");
-                    actions.setVisible(true);
-                    agregando = true;
+                    btnModificarSucursales.setDisable(true);
+                    btnBorrarSucursales.setDisable(true);
+                    txtNombreSucursales.setText("");
+                    txtCiudadSucursales.setText("");
+                    txtDireccionSucursales.setText("");
+                    actionsSucursales.setVisible(true);
+                    agregandoSucursales = true;
                 }
             }
         });
-        btnModificar.setOnMouseClicked(new EventHandler<MouseEvent>(){
+        btnModificarSucursales.setOnMouseClicked(new EventHandler<MouseEvent>(){
             @Override
             public void handle(MouseEvent event) {
-                Sucursal g = table.getSelectionModel().getSelectedItem();
-                if(txtNombre.getText().trim().length() > 0 && txtCiudad.getText().trim().length() > 0 && txtDireccion.getText().trim().length() > 0){
-                    g.setNombreSucursal(txtNombre.getText());
-                    g.setCiudad(txtCiudad.getText());
-                    g.setDireccion(txtDireccion.getText());
+                Sucursal g = tableSucursales.getSelectionModel().getSelectedItem();
+                if(txtNombreSucursales.getText().trim().length() > 0 && txtCiudadSucursales.getText().trim().length() > 0 && txtDireccionSucursales.getText().trim().length() > 0){
+                    g.setNombreSucursal(txtNombreSucursales.getText());
+                    g.setCiudad(txtCiudadSucursales.getText());
+                    g.setDireccion(txtDireccionSucursales.getText());
                     if(sucursaldao.update(g)){
                         Alert msg = new Alert(Alert.AlertType.INFORMATION);
                         msg.setTitle("Modificar");
@@ -115,8 +115,8 @@ public class SucursalesController implements Initializable {
                         msg.setContentText("Sucursal modificado correctamente");
                         Optional<ButtonType> respuesta = msg.showAndWait();
                         if(respuesta.get() == ButtonType.OK){
-                            table.setItems(sucursaldao.findAll());
-                            actions.setVisible(false);
+                            tableSucursales.setItems(sucursaldao.findAll());
+                            actionsSucursales.setVisible(false);
                         }
                     }
                     else{
@@ -136,10 +136,10 @@ public class SucursalesController implements Initializable {
                 }
             }
         });
-        btnBorrar.setOnMouseClicked(new EventHandler<MouseEvent>(){
+        btnBorrarSucursales.setOnMouseClicked(new EventHandler<MouseEvent>(){
             @Override
             public void handle(MouseEvent event) {
-                Sucursal g = table.getSelectionModel().getSelectedItem();
+                Sucursal g = tableSucursales.getSelectionModel().getSelectedItem();
                 if(sucursaldao.delete(g.getNumSucursal())){
                     Alert msg = new Alert(Alert.AlertType.INFORMATION);
                     msg.setTitle("Borrar");
@@ -147,8 +147,8 @@ public class SucursalesController implements Initializable {
                     msg.setContentText("Sucursal borrado correctamente");
                     Optional<ButtonType> respuesta = msg.showAndWait();
                     if(respuesta.get() == ButtonType.OK){
-                        table.setItems(sucursaldao.findAll());
-                        actions.setVisible(false);
+                        tableSucursales.setItems(sucursaldao.findAll());
+                        actionsSucursales.setVisible(false);
                     }
                 }
                 else{

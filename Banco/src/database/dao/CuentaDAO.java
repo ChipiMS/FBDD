@@ -74,7 +74,7 @@ public class CuentaDAO {
             ResultSet rs = st.executeQuery(query);
             
             while(rs.next()) {
-                clientes.add(new Cliente(rs.getInt("seguroSocial"),rs.getString("nombreCliente"), rs.getString("ciudad") , rs.getString("calle")));
+                clientes.add(new Cliente(rs.getString("seguroSocial"),rs.getString("nombreCliente"), rs.getString("ciudad") , rs.getString("calle")));
             }
             rs.close();
             st.close();

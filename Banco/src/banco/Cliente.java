@@ -10,27 +10,20 @@ package banco;
  * @author aldoea
  */
 public class Cliente {
-    int seguroSocial;
-    String nombreCliente,ciudad,calle;
+    String seguroSocial,nombreCliente,ciudad,calle;
 
-    public Cliente(int seguroSocial, String nombreCliente, String ciudad, String calle) {
+    public Cliente(String seguroSocial, String nombreCliente, String ciudad, String calle) {
         this.seguroSocial = seguroSocial;
         this.nombreCliente = nombreCliente;
         this.ciudad = ciudad;
         this.calle = calle;
     }
 
-    public Cliente(String nombreCliente, String ciudad, String calle) {
-        this.nombreCliente = nombreCliente;
-        this.ciudad = ciudad;
-        this.calle = calle;
-    }
-
-    public int getSeguroSocial() {
+    public String getSeguroSocial() {
         return seguroSocial;
     }
 
-    public void setSeguroSocial(int seguroSocial) {
+    public void setSeguroSocial(String seguroSocial) {
         this.seguroSocial = seguroSocial;
     }
 
@@ -60,7 +53,7 @@ public class Cliente {
 
     @Override
     public String toString() {
-        return seguroSocial + ""; //To change body of generated methods, choose Tools | Templates.
+        return nombreCliente;
     }
 
 } // END Cliente

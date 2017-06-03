@@ -7,18 +7,19 @@
 <?import javafx.scene.layout.*?>
 
 <VBox prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="banco.fxml.SucursalesController">
-    <TableView fx:id="table"></TableView>
-    <GridPane fx:id="actions" visible="false">
+    <Label text="Sucursales" ></Label>
+    <TableView fx:id="tableSucursales"></TableView>
+    <GridPane fx:id="actionsSucursales" visible="false">
         <Label text="Nombre" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-        <TextField fx:id="txtNombre" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+        <TextField fx:id="txtNombreSucursales" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
         <Label text="Ciudad" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-        <TextField fx:id="txtCiudad" GridPane.columnIndex="1" GridPane.rowIndex="1"/> 
+        <TextField fx:id="txtCiudadSucursales" GridPane.columnIndex="1" GridPane.rowIndex="1"/> 
         <Label text="Dirección" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-        <TextField fx:id="txtDireccion" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+        <TextField fx:id="txtDireccionSucursales" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
     </GridPane>
     <HBox>
-        <Button fx:id="btnAgregar" text="Agregar"></Button>
-        <Button fx:id="btnModificar" text="Modificar" disable="true" ></Button>
-        <Button fx:id="btnBorrar" text="Borrar" disable="true" ></Button>
+        <Button fx:id="btnAgregarSucursales" text="Agregar"></Button>
+        <Button fx:id="btnModificarSucursales" text="Modificar" disable="true" ></Button>
+        <Button fx:id="btnBorrarSucursales" text="Borrar" disable="true" ></Button>
     </HBox>
 </VBox>

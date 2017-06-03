@@ -1,11 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package database.dao;
-
-import banco.Cliente;
+import banco.Empleado;
+import banco.TipoEmpleado;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,23 +8,20 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-/**
- *
- * @author aldoea
- */
-public class ClienteDAO {
+public class TipoEmpleadoDAO {
     Connection conn;
-    public ClienteDAO(Connection conn){
+    
+    public TipoEmpleadoDAO(Connection conn){
         this.conn = conn;
     }
-    public boolean isDuplicated(String seguroSocial){
+    public boolean isDuplicated(String clave){
         boolean duplicated = false;
         try {
-            String query = "SELECT seguroSocial FROM cliente";
+            String query = "SELECT claveTipoEmpleado FROM tipoEmpleado";
             Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery(query);
             while(rs.next()) {
-                if(rs.getString("seguroSocial").equals(seguroSocial))
+                if(rs.getString("claveTipoEmpleado").equals(clave))
                     duplicated = true;
             }
             rs.close();
@@ -40,14 +32,14 @@ public class ClienteDAO {
         }
         return duplicated;
     }
-    public ObservableList<Cliente> findAll() {
-        ObservableList<Cliente> clientes = FXCollections.observableArrayList();
+    public ObservableList<TipoEmpleado> findAll() {
+        ObservableList<TipoEmpleado> elements = FXCollections.observableArrayList();
         try {
-            String query = "SELECT * FROM cliente";
+            String query = "SELECT * FROM tipoEmpleado";
             Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery(query);
             while(rs.next()) {
-                clientes.add(new Cliente(rs.getString("seguroSocial"), rs.getString("nombreCliente"),rs.getString("ciudad"),rs.getString("calle")));
+                elements.add(new TipoEmpleado(rs.getString("claveTipoEmpleado"),rs.getString("descripcion")));
             }
             rs.close();
             st.close();
@@ -56,13 +48,13 @@ public class ClienteDAO {
             ex.printStackTrace();
             System.out.println("Error al recuperar información...");
         }
-        return clientes;
+        return elements;
     }
-    public Boolean delete(String seguroSocial) {
+    public Boolean delete(String clave) {
         try {
-            String query = "delete from cliente where seguroSocial = ?";
+            String query = "delete from tipoEmpleado where claveTipoEmpleado = ?";
             PreparedStatement st = conn.prepareStatement(query);
-            st.setString(1, seguroSocial);
+            st.setString(1, clave);
             st.execute();
             return true;
         } catch (Exception e) {
@@ -70,16 +62,14 @@ public class ClienteDAO {
         }
         return false;
     }
-    public Boolean insert(Cliente cliente) {
+    public Boolean insert(TipoEmpleado tipo) {
         try {
-            String query = "insert into cliente "
-                    + " (seguroSocial,nombreCliente,ciudad,calle)"
-                    + " values (?,?,?,?)";
+            String query = "insert into tipoEmpleado "
+                    + " (claveTipoEmpleado,descripcion)"
+                    + " values (?,?)";
             PreparedStatement st =  conn.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
-            st.setString(1, cliente.getSeguroSocial());
-            st.setString(2, cliente.getNombreCliente());
-            st.setString(3, cliente.getCiudad());
-            st.setString(4, cliente.getCalle());
+            st.setString(1, tipo.getClave());
+            st.setString(2, tipo.getDescripcion());
             st.execute();
             return true;
         } catch (Exception e) {
@@ -89,17 +79,14 @@ public class ClienteDAO {
         
         return false;
     }
-    public Boolean update(String seguroSocial,Cliente cliente) {
+    public Boolean update(TipoEmpleado tipo) {
         try {
-            String query = "update cliente "
-                    + " set nombreCliente = ?,ciudad = ?,calle = ?,set seguroSocial = ?"
-                    + " where seguroSocial = ?";
+            String query = "update tipoEmpleado "
+                    + " set descripcion = ?"
+                    + " where claveTipoEmpleado = ?";
             PreparedStatement st =  conn.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
-            st.setString(1, cliente.getNombreCliente());
-            st.setString(2, cliente.getCiudad());
-            st.setString(3, cliente.getCalle());
-            st.setString(4, cliente.getSeguroSocial());
-            st.setString(5, seguroSocial);
+            st.setString(1, tipo.getDescripcion());
+            st.setString(2, tipo.getClave());
             st.execute();
             return true;
         } catch (Exception e) {
@@ -108,5 +95,5 @@ public class ClienteDAO {
         }
         
         return false;
-    } 
-} // END ClienteDAO
+    }
+}
