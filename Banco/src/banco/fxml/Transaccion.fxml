@@ -14,8 +14,12 @@
         <TextField fx:id="txtCantidadTransacciones" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
         <Label text="Fecha (AAAA-MM-DD) " GridPane.columnIndex="0" GridPane.rowIndex="1"/>
         <TextField fx:id="txtFechaTransacciones" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-        <Label text="Número Cuenta " GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-        <ComboBox fx:id="cmbCuentaTransacciones" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+        <Label text="Tipo de transacción " GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+        <ComboBox fx:id="cmbTipoTransaccion" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+        <Label text="Número Cuenta Beneficiario " GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+        <ComboBox fx:id="cmbCuentaTransacciones" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+        <Label text="Número Cuenta del Transpaso " GridPane.columnIndex="0" GridPane.rowIndex="4" disable="true" />
+        <ComboBox fx:id="cmbCuentaTranspaso" GridPane.columnIndex="1" GridPane.rowIndex="4" disable="true" />
     </GridPane>
     <HBox>
         <Button fx:id="btnAgregarTransacciones" text="Agregar"></Button>

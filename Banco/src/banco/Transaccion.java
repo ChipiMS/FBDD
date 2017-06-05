@@ -11,21 +11,30 @@ package banco;
  */
 public class Transaccion {
     int numTran, cantidad;
-    String fecha;
+    String fecha, tipoTransaccion;
     int numCuenta;
 
-    public Transaccion(int numTran, int cantidad, String fecha, int numCuenta) {
+    public Transaccion(int numTran, int cantidad, String fecha, int numCuenta, String tipoTransaccion) {
         this.numTran = numTran;
         this.cantidad = cantidad;
         this.fecha = fecha;
         this.numCuenta = numCuenta;
+        this.tipoTransaccion = tipoTransaccion;
     }
     
-    public Transaccion(int cantidad, String fecha, int numCuenta) {
-        this.numTran = numTran;
+    public Transaccion(int cantidad, String fecha, int numCuenta, String tipoTransaccion) {
         this.cantidad = cantidad;
         this.fecha = fecha;
         this.numCuenta = numCuenta;
+        this.tipoTransaccion = tipoTransaccion;
+    }
+
+    public String getTipoTransaccion() {
+        return tipoTransaccion;
+    }
+
+    public void setTipoTransaccion(String tipoTransaccion) {
+        this.tipoTransaccion = tipoTransaccion;
     }
 
     public int getNumTran() {

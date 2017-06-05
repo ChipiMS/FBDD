@@ -16,4 +16,5 @@
     <Button fx:id="btnTipoCuentas" text="Tipos de cuentas" />
     <Button fx:id="btnTransacciones" text="Transacciones" />
     <Button fx:id="btnTipoTransacciones" text="Tipos de transacciones" />
+    <Button fx:id="btnConsultas" text="Consultas" />
 </VBox>

@@ -163,8 +163,8 @@ public class CuentaController implements Initializable {
                         return;
                     }
                     g.setSaldo(Double.parseDouble(txtSaldoCuenta.getText()));
-                    g.setSeguroSocial(cmbClienteCuenta.getSelectionModel().getSelectedItem().toString());
-                    g.setNumSucursal(Integer.parseInt(cmbSucursalCuenta.getSelectionModel().getSelectedItem().toString()));
+                    g.setSeguroSocial(cmbClienteCuenta.getSelectionModel().getSelectedItem().getSeguroSocial());
+                    g.setNumSucursal(cmbSucursalCuenta.getSelectionModel().getSelectedItem().getNumSucursal());
                     if (cuentadao.update(g)) {
                         Alert msg = new Alert(Alert.AlertType.INFORMATION);
                         msg.setTitle("Modificar");
