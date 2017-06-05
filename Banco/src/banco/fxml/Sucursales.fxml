@@ -21,5 +21,6 @@
         <Button fx:id="btnAgregarSucursales" text="Agregar"></Button>
         <Button fx:id="btnModificarSucursales" text="Modificar" disable="true" ></Button>
         <Button fx:id="btnBorrarSucursales" text="Borrar" disable="true" ></Button>
+        <Button fx:id="btnVerTransacciones" text="Transacciones" disable="true"></Button>  
     </HBox>
 </VBox>

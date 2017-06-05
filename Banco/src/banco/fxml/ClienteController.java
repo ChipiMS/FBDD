@@ -8,6 +8,7 @@ package banco.fxml;
 import banco.Cliente;
 import database.MySQL;
 import database.dao.ClienteDAO;
+import java.awt.BorderLayout;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -23,6 +24,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 
 /**
  * FXML Controller class
@@ -32,7 +36,7 @@ import javafx.scene.layout.GridPane;
 public class ClienteController implements Initializable {
 
     @FXML
-    Button btnAgregarCliente,btnModificarCliente,btnBorrarCliente;
+    Button btnAgregarCliente,btnModificarCliente,btnBorrarCliente,btnVerTransacciones;
     @FXML
     GridPane actionsCliente;
     @FXML
@@ -69,6 +73,7 @@ public class ClienteController implements Initializable {
                     return;
                 btnModificarCliente.setDisable(false);
                 btnBorrarCliente.setDisable(false);
+                btnVerTransacciones.setDisable(false);
                 txtSeguroSocialCliente.setText(g.getSeguroSocial());
                 txtNombreCliente.setText(g.getNombreCliente());
                 txtCiudadCliente.setText(g.getCiudad());
@@ -114,6 +119,7 @@ public class ClienteController implements Initializable {
                 else{
                     btnModificarCliente.setDisable(true);
                     btnBorrarCliente.setDisable(true);
+                    btnVerTransacciones.setDisable(true);
                     txtNombreCliente.setText("");
                     txtCiudadCliente.setText("");
                     txtCalleCliente.setText("");
@@ -190,6 +196,28 @@ public class ClienteController implements Initializable {
                     msg.setContentText("No se puede borrar");
                     msg.show();
                 }
+            }
+        });
+        btnVerTransacciones.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                String g = tableCliente.getSelectionModel().getSelectedItem().getSeguroSocial();
+
+                JFrame mainFrame = new JFrame();
+                //Container container;
+                mainFrame.setTitle("Transacciones");
+                mainFrame.setSize(600, 370);
+                mainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                mainFrame.setLayout(new BorderLayout());
+                //container = mainFrame.getContentPane();
+                JTable mytable = new JTable(clientedao.findTransaccionJT(g));
+                JScrollPane scrollPane = new JScrollPane(mytable);
+                mytable.setFillsViewportHeight(true);
+                mainFrame.add(scrollPane);
+//mainFrame.add(mytable);
+//initComponents();
+                mainFrame.setVisible(true);
+                mainFrame.setLocationRelativeTo(null);
             }
         });
     }   // END Initialize 

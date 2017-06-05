@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author aldoea
@@ -109,4 +110,34 @@ public class ClienteDAO {
         
         return false;
     } 
+    public DefaultTableModel findTransaccionJT(String seguroSocial) {
+        Object ColumnName[] = {"Número", "Cantidad", "Fecha", "Núm. Cuenta", "Tipo Transaccion"};
+        DefaultTableModel clientes = new DefaultTableModel(null, ColumnName);
+
+        try {
+            Object[] datos = new Object[5];
+            String query = "SELECT t.numTran, t.cantidad, t.fecha, t.numCuenta, tt.descripcion "
+                    + "FROM cliente cl inner join cuenta c on cl.seguroSocial = c.seguroSocial "
+                    + "inner join transaccion t on c.numCuenta = t.numCuenta "
+                    + "inner join tipotransaccion tt on t.claveTipoTransaccion = tt.claveTipoTransaccion "
+                    + "WHERE cl.seguroSocial = ?";
+            PreparedStatement st = conn.prepareStatement(query);
+            st.setString(1, seguroSocial);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                for (int i = 0; i < datos.length; i++) {
+                    datos[i] = rs.getObject(i + 1);
+                }
+                clientes.addRow(datos);
+            }
+
+            rs.close();
+            st.close();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            System.out.println("Error al recuperar información...");
+        }
+        return clientes;
+    }
 } // END ClienteDAO

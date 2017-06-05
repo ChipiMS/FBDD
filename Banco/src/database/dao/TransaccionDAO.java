@@ -18,6 +18,7 @@ import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -238,5 +239,34 @@ public class TransaccionDAO {
             }
         }
         return true;
+    }
+    public DefaultTableModel findSucursalJT(int numCuenta) {
+        Object ColumnName[] = {"Número", "Nombre", "Ciudad", "Dirección"};
+        DefaultTableModel cuenta = new DefaultTableModel(null, ColumnName);
+
+        try {
+            Object[] datos = new Object[4];
+            String query = "SELECT distinct s.numSucursal, s.nombreSucursal, s.ciudad, s.direccion "
+                    + "FROM sucursal s inner join cuenta c on s.numSucursal = c.numSucursal "
+                    + "inner join transaccion t on c.numCuenta = t.numCuenta "
+                    + "WHERE c.numCuenta = ?";
+            PreparedStatement st = conn.prepareStatement(query);
+            st.setInt(1, numCuenta);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                for (int i = 0; i < datos.length; i++) {
+                    datos[i] = rs.getObject(i + 1);
+                }
+                cuenta.addRow(datos);
+            }
+
+            rs.close();
+            st.close();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            System.out.println("Error al recuperar información...");
+        }
+        return cuenta;
     }
 }

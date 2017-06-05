@@ -6,27 +6,27 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<HBox prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="banco.fxml.ClienteController">
-    <VBox>
-        <Label text="Clientes"></Label>
-        <TableView fx:id="tableCliente"></TableView>
-        <GridPane fx:id="actionsCliente" visible="false">
-            <Label text="Seguro social" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-            <TextField fx:id="txtSeguroSocialCliente" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
-            <Label text="Nombre" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-            <TextField fx:id="txtNombreCliente" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-            <Label text="Ciudad" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-            <TextField fx:id="txtCiudadCliente" GridPane.columnIndex="1" GridPane.rowIndex="2"/> 
-            <Label text="Calle" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
-            <TextField fx:id="txtCalleCliente" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
-        </GridPane>
-        <HBox>
-            <Button fx:id="btnAgregarCliente" text="Agregar"></Button>
-            <Button fx:id="btnModificarCliente" text="Modificar" disable="true" ></Button>
-            <Button fx:id="btnBorrarCliente" text="Borrar" disable="true" ></Button>
-        </HBox>
-    </VBox>
+<VBox prefHeight="400.0" prefWidth="600.0"  xmlns:fx="http://javafx.com/fxml/1" fx:controller="banco.fxml.ClienteController">
     
-</HBox>
+    <Label text="Clientes"></Label>
+    <TableView fx:id="tableCliente"></TableView>
+    <GridPane fx:id="actionsCliente" visible="false">
+        <Label text="Seguro social" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+        <TextField fx:id="txtSeguroSocialCliente" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+        <Label text="Nombre" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        <TextField fx:id="txtNombreCliente" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+        <Label text="Ciudad" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+        <TextField fx:id="txtCiudadCliente" GridPane.columnIndex="1" GridPane.rowIndex="2"/> 
+        <Label text="Calle" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+        <TextField fx:id="txtCalleCliente" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+    </GridPane>
+    <HBox>
+        <Button fx:id="btnAgregarCliente" text="Agregar"></Button>
+        <Button fx:id="btnModificarCliente" text="Modificar" disable="true" ></Button>
+        <Button fx:id="btnBorrarCliente" text="Borrar" disable="true" ></Button>
+        <Button fx:id="btnVerTransacciones" text="Transacciones" disable="true"></Button>
+    </HBox>
+    
+</VBox>
 
 

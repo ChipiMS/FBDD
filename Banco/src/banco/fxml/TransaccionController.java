@@ -11,6 +11,7 @@ import banco.Transaccion;
 import database.MySQL;
 import database.dao.TipoTransaccionDAO;
 import database.dao.TransaccionDAO;
+import java.awt.BorderLayout;
 import java.net.URL;
 import java.util.List;
 import java.util.Optional;
@@ -36,6 +37,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 
 /**
  * FXML Controller class
@@ -45,7 +49,7 @@ import javafx.stage.Stage;
 public class TransaccionController implements Initializable {
 
     @FXML
-    Button btnAgregarTransacciones, btnModificarTransacciones, btnBorrarTransacciones;
+    Button btnAgregarTransacciones, btnModificarTransacciones, btnBorrarTransacciones, btnVerSucursal;
     @FXML
     GridPane actionsTransacciones;
     @FXML
@@ -141,6 +145,7 @@ public class TransaccionController implements Initializable {
                 cmbCuentaTranspaso.getSelectionModel().clearSelection();
                 btnModificarTransacciones.setDisable(false);
                 btnBorrarTransacciones.setDisable(false);
+                btnVerSucursal.setDisable(false);
                 actionsTransacciones.setVisible(true);
                 agregandoTransacciones = false;
             }
@@ -198,6 +203,7 @@ public class TransaccionController implements Initializable {
                 } else {
                     btnModificarTransacciones.setDisable(true);
                     btnBorrarTransacciones.setDisable(true);
+                    btnVerSucursal.setDisable(true);
                     txtCantidadTransacciones.setText("");
                     txtFechaTransacciones.setText("");
                     cmbCuentaTransacciones.getSelectionModel().clearSelection();
@@ -272,6 +278,28 @@ public class TransaccionController implements Initializable {
                     msg.setContentText("No se puede borrar");
                     msg.show();
                 }
+            }
+        });
+        btnVerSucursal.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                int g = tableTransacciones.getSelectionModel().getSelectedItem().getNumCuenta();
+
+                JFrame mainFrame = new JFrame();
+                //Container container;
+                mainFrame.setTitle("Sucursal");
+                mainFrame.setSize(600, 370);
+                mainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                mainFrame.setLayout(new BorderLayout());
+                //container = mainFrame.getContentPane();
+                JTable mytable = new JTable(transacciondao.findSucursalJT(g));
+                JScrollPane scrollPane = new JScrollPane(mytable);
+                mytable.setFillsViewportHeight(true);
+                mainFrame.add(scrollPane);
+//mainFrame.add(mytable);
+//initComponents();
+                mainFrame.setVisible(true);
+                mainFrame.setLocationRelativeTo(null);
             }
         });
     }
