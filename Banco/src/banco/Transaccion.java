@@ -12,7 +12,7 @@ package banco;
 public class Transaccion {
     int numTran, cantidad;
     String fecha, tipoTransaccion;
-    int numCuenta;
+    int numCuenta, numCuentaDestino;
 
     public Transaccion(int numTran, int cantidad, String fecha, int numCuenta, String tipoTransaccion) {
         this.numTran = numTran;
@@ -27,6 +27,22 @@ public class Transaccion {
         this.fecha = fecha;
         this.numCuenta = numCuenta;
         this.tipoTransaccion = tipoTransaccion;
+    }
+    
+    public Transaccion(int cantidad, String fecha, int numCuenta, int numCuentaDestino, String tipoTransaccion) {
+        this.cantidad = cantidad;
+        this.fecha = fecha;
+        this.numCuenta = numCuenta;
+        this.numCuentaDestino = numCuentaDestino;
+        this.tipoTransaccion = tipoTransaccion;
+    }
+
+    public int getNumCuentaDestino() {
+        return numCuentaDestino;
+    }
+
+    public void setNumCuentaDestino(int numCuentaDestino) {
+        this.numCuentaDestino = numCuentaDestino;
     }
 
     public String getTipoTransaccion() {

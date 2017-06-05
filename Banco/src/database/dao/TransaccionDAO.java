@@ -103,19 +103,54 @@ public class TransaccionDAO {
 
     public Boolean insert(Transaccion transaccion) {
         try {
-            if (realizaTransaccion(transaccion)) {
+            if (transaccion.getNumCuentaDestino() > 0) {
+                transaccion.setTipoTransaccion("077");
+                if (!realizaTransaccion(transaccion)) {
+                    return false;
+                }
+                transaccion.setTipoTransaccion("088");
                 String query = "insert into transaccion "
                         + " (numTran,cantidad,fecha,numCuenta,claveTipoTransaccion)"
                         + " values (?,?,?,?,?)";
                 PreparedStatement st = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
                 st.setInt(1, nextId);
-                st.setDouble(2, transaccion.getCantidad());
+                st.setDouble(2, -transaccion.getCantidad());
+                st.setString(3, transaccion.getFecha());
+                st.setInt(4, transaccion.getNumCuenta());
+                st.setString(5, transaccion.getTipoTransaccion());
+                nextId++;
+                st.execute();
+                transaccion.setTipoTransaccion("099");
+                transaccion.setNumCuenta(transaccion.getNumCuentaDestino());
+                realizaTransaccion(transaccion);
+                transaccion.setTipoTransaccion("088");
+                query = "insert into transaccion "
+                        + " (numTran,cantidad,fecha,numCuenta,claveTipoTransaccion)"
+                        + " values (?,?,?,?,?)";
+                st = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+                st.setInt(1, nextId);
+                st.setDouble(2, +transaccion.getCantidad());
                 st.setString(3, transaccion.getFecha());
                 st.setInt(4, transaccion.getNumCuenta());
                 st.setString(5, transaccion.getTipoTransaccion());
                 nextId++;
                 st.execute();
                 return true;
+            } else {
+                if (realizaTransaccion(transaccion)) {
+                    String query = "insert into transaccion "
+                            + " (numTran,cantidad,fecha,numCuenta,claveTipoTransaccion)"
+                            + " values (?,?,?,?,?)";
+                    PreparedStatement st = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+                    st.setInt(1, nextId);
+                    st.setDouble(2, transaccion.getCantidad());
+                    st.setString(3, transaccion.getFecha());
+                    st.setInt(4, transaccion.getNumCuenta());
+                    st.setString(5, transaccion.getTipoTransaccion());
+                    nextId++;
+                    st.execute();
+                    return true;
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -18,7 +18,7 @@
         <ComboBox fx:id="cmbTipoTransaccion" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
         <Label text="Número Cuenta Beneficiario " GridPane.columnIndex="0" GridPane.rowIndex="3"/>
         <ComboBox fx:id="cmbCuentaTransacciones" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
-        <Label text="Número Cuenta del Transpaso " GridPane.columnIndex="0" GridPane.rowIndex="4" disable="true" />
+        <Label fx:id="lblCT" text="Número Cuenta del Transpaso " GridPane.columnIndex="0" GridPane.rowIndex="4" disable="true" />
         <ComboBox fx:id="cmbCuentaTranspaso" GridPane.columnIndex="1" GridPane.rowIndex="4" disable="true" />
     </GridPane>
     <HBox>

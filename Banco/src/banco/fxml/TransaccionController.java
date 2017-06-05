@@ -28,6 +28,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -58,6 +59,10 @@ public class TransaccionController implements Initializable {
     ComboBox<Cuenta> cmbCuentaTransacciones;
     @FXML
     ComboBox<TipoTransaccion> cmbTipoTransaccion;
+    @FXML
+    ComboBox<Cuenta> cmbCuentaTranspaso;
+    @FXML
+    Label lblCT;
     Boolean agregandoTransacciones = false;
 
     TransaccionDAO transaccion;
@@ -89,13 +94,26 @@ public class TransaccionController implements Initializable {
         transaccion = new TransaccionDAO(db.getConnection());
         cuentas = transaccion.findAllCuenta();
         cmbCuentaTransacciones.getItems().addAll(cuentas);
+        cmbCuentaTranspaso.getItems().addAll(cuentas);
         tipoTransaccion = new TipoTransaccionDAO(db.getConnection());
         tipoTransaccionList = tipoTransaccion.findAll();
         cmbTipoTransaccion.getItems().addAll(tipoTransaccionList);
         cmbTipoTransaccion.valueProperty().addListener(new ChangeListener<TipoTransaccion>() {
             @Override
             public void changed(ObservableValue<? extends TipoTransaccion> observable, TipoTransaccion oldValue, TipoTransaccion newValue) {
-                System.out.println(newValue);
+                if (newValue != null) {
+                    if (!newValue.getClave().equals("088")) {
+                        lblCT.setDisable(true);
+                        cmbCuentaTranspaso.setDisable(true);
+                    } else {
+                        lblCT.setDisable(false);
+                        cmbCuentaTranspaso.setDisable(false);
+
+                    }
+                } else {
+                    lblCT.setDisable(true);
+                    cmbCuentaTranspaso.setDisable(true);
+                }
             }
 
         });
@@ -120,6 +138,7 @@ public class TransaccionController implements Initializable {
                         cmbTipoTransaccion.getSelectionModel().clearAndSelect(i);
                     }
                 }
+                cmbCuentaTranspaso.getSelectionModel().clearSelection();
                 btnModificarTransacciones.setDisable(false);
                 btnBorrarTransacciones.setDisable(false);
                 actionsTransacciones.setVisible(true);
@@ -140,17 +159,32 @@ public class TransaccionController implements Initializable {
                             msg.show();
                             return;
                         }
-                        if (transacciondao.insert(new Transaccion(Integer.parseInt(txtCantidadTransacciones.getText()), txtFechaTransacciones.getText(), Integer.parseInt(cmbCuentaTransacciones.getSelectionModel().getSelectedItem().toString()), cmbTipoTransaccion.getSelectionModel().getSelectedItem().getClave()))) {
-                            //transacciondao.insert(new Transaccion(Integer.parseInt(txtCantidadTransacciones.getText()), txtFechaTransacciones.getText(), Integer.parseInt(cmbCuentaTransacciones.getSelectionModel().getSelectedItem().toString())));
-                            Alert msg = new Alert(Alert.AlertType.INFORMATION);
-                            msg.setTitle("Guardar");
-                            msg.setHeaderText("Transacción");
-                            msg.setContentText("Información guardada correctamente");
-                            Optional<ButtonType> respuesta = msg.showAndWait();
-                            if (respuesta.get() == ButtonType.OK) {
-                                tableTransacciones.setItems(transacciondao.findAll());
-                                agregandoTransacciones = false;
-                                actionsTransacciones.setVisible(false);
+                        if (cmbTipoTransaccion.getSelectionModel().getSelectedItem().getClave().equals("088")) {
+                            if (transacciondao.insert(new Transaccion(Integer.parseInt(txtCantidadTransacciones.getText()), txtFechaTransacciones.getText(), Integer.parseInt(cmbCuentaTransacciones.getSelectionModel().getSelectedItem().toString()), Integer.parseInt(cmbCuentaTranspaso.getSelectionModel().getSelectedItem().toString()), cmbTipoTransaccion.getSelectionModel().getSelectedItem().getClave()))) {
+                                Alert msg = new Alert(Alert.AlertType.INFORMATION);
+                                msg.setTitle("Guardar");
+                                msg.setHeaderText("Transacción");
+                                msg.setContentText("Información guardada correctamente");
+                                Optional<ButtonType> respuesta = msg.showAndWait();
+                                if (respuesta.get() == ButtonType.OK) {
+                                    tableTransacciones.setItems(transacciondao.findAll());
+                                    agregandoTransacciones = false;
+                                    actionsTransacciones.setVisible(false);
+                                }
+                            }
+                        } else {
+                            if (transacciondao.insert(new Transaccion(Integer.parseInt(txtCantidadTransacciones.getText()), txtFechaTransacciones.getText(), Integer.parseInt(cmbCuentaTransacciones.getSelectionModel().getSelectedItem().toString()), cmbTipoTransaccion.getSelectionModel().getSelectedItem().getClave()))) {
+                                //transacciondao.insert(new Transaccion(Integer.parseInt(txtCantidadTransacciones.getText()), txtFechaTransacciones.getText(), Integer.parseInt(cmbCuentaTransacciones.getSelectionModel().getSelectedItem().toString())));
+                                Alert msg = new Alert(Alert.AlertType.INFORMATION);
+                                msg.setTitle("Guardar");
+                                msg.setHeaderText("Transacción");
+                                msg.setContentText("Información guardada correctamente");
+                                Optional<ButtonType> respuesta = msg.showAndWait();
+                                if (respuesta.get() == ButtonType.OK) {
+                                    tableTransacciones.setItems(transacciondao.findAll());
+                                    agregandoTransacciones = false;
+                                    actionsTransacciones.setVisible(false);
+                                }
                             }
                         }
                     } else {
@@ -167,6 +201,7 @@ public class TransaccionController implements Initializable {
                     txtCantidadTransacciones.setText("");
                     txtFechaTransacciones.setText("");
                     cmbCuentaTransacciones.getSelectionModel().clearSelection();
+                    cmbCuentaTranspaso.getSelectionModel().clearSelection();
                     cmbTipoTransaccion.getSelectionModel().clearSelection();
                     actionsTransacciones.setVisible(true);
                     agregandoTransacciones = true;
